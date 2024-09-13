@@ -30,7 +30,7 @@ class Student:
             self.var_teacher=StringVar()
 
             # IMAGE 1
-            img = Image.open(r"F:\wallpapers\student1.jpg")
+            img = Image.open(r"E:\wallpapers\student1.jpg")
             img = img.resize((500,130), Image.BILINEAR)
             self.photoimg = ImageTk.PhotoImage(img)
 
@@ -38,7 +38,7 @@ class Student:
             f_lbl.place(x=0, y=0, width=500, height=130)
 
             # IMAGE 2   
-            img1 = Image.open(r"F:\wallpapers\student2.jpg")
+            img1 = Image.open(r"E:\wallpapers\student2.jpg")
             img1 = img1.resize((500,130), Image.BILINEAR)
             self.photoimg1 = ImageTk.PhotoImage(img1)
 
@@ -46,7 +46,7 @@ class Student:
             f_lbl1.place(x=500, y=0, width=520, height=130)
 
             # IMAGE 3
-            img2 = Image.open(r"F:\wallpapers\student3.jpg")
+            img2 = Image.open(r"E:\wallpapers\student3.jpg")
             img2 = img2.resize((500,130), Image.BILINEAR)
             self.photoimg2 = ImageTk.PhotoImage(img2)
 
@@ -54,7 +54,7 @@ class Student:
             f_lbl2.place(x=1000, y=0, width=520, height=130)
 
             #bg image
-            bg_img = Image.open(r"F:\wallpapers\background.jpg")
+            bg_img = Image.open(r"E:\wallpapers\background.jpg")
             bg_img = bg_img.resize((1530, 710), Image.BILINEAR)
             self.bg_photoimg = ImageTk.PhotoImage(bg_img)
 
@@ -72,7 +72,7 @@ class Student:
             LEFT_frame=LabelFrame(main_frame,bd=2,relief=RIDGE,text="Student Details",font=("Helvetica",12,"bold"))
             LEFT_frame.place(x=10,y=10,width=730,height=580)
 
-            img_left = Image.open(r"F:\wallpapers\attendance1.jpg")
+            img_left = Image.open(r"E:\wallpapers\attendance1.jpg")
             img_left = img_left.resize((720,130), Image.BILINEAR)
             self.photoimg_left = ImageTk.PhotoImage(img_left)
 
@@ -244,7 +244,7 @@ class Student:
             Right_frame=LabelFrame(main_frame,bd=2,relief=RIDGE,text="Student Details",font=("Helvetica",12,"bold"))
             Right_frame.place(x=750,y=10,width=720,height=580)
 
-            img_right = Image.open(r"F:\wallpapers\student1.jpg")
+            img_right = Image.open(r"E:\wallpapers\student1.jpg")
             img_right = img_right.resize((720, 130), Image.BILINEAR)
             self.photoimg_right = ImageTk.PhotoImage(img_right)
 
@@ -337,7 +337,7 @@ class Student:
                   messagebox.showerror("Error", "All fields are required", parent=self.root)
             else:
                   try:
-                        conn = mysql.connector.connect(host="localhost", username="root", password="aviral0607", database="priyanshu")
+                        conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
                         my_cursor = conn.cursor()
                         my_cursor.execute("insert into student values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                                           (self.var_dep.get(),
@@ -366,7 +366,7 @@ class Student:
 
       #======================Fetch data =============================
       def fetch_data(self):
-            conn = mysql.connector.connect(host="localhost", username="root", password="aviral0607", database="priyanshu")
+            conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
             my_cursor = conn.cursor()
             my_cursor.execute("select * from student")
             data=my_cursor.fetchall()
@@ -408,7 +408,7 @@ class Student:
                         try:
                               update = messagebox.askyesno("Update", "Do you want to update this student's details?", parent=self.root)
                               if update:
-                                    conn = mysql.connector.connect(host="localhost", username="root", password="aviral0607", database="priyanshu")
+                                    conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
                                     my_cursor = conn.cursor()
                                     my_cursor.execute("UPDATE student SET Dep=%s, course=%s, Year=%s, Semester=%s, Division=%s, Roll=%s, Gender=%s, Dob=%s, Email=%s, Phone=%s, Address=%s, Teacher=%s, PhotoSample=%s WHERE Student_id=%s",
 
