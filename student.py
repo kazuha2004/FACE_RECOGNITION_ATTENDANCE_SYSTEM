@@ -28,6 +28,7 @@ class Student:
             self.var_phone=StringVar()
             self.var_address=StringVar()
             self.var_teacher=StringVar()
+            self.var_radio1=StringVar()
 
             # IMAGE 1
             img = Image.open(r"E:\wallpapers\student1.jpg")
@@ -204,14 +205,10 @@ class Student:
             teacher_entry.grid(row=4,column=3,padx=10,pady=(5),sticky=W)
 
             # radio button
-            self.var_radio1 = StringVar()
-            self.var_radio1.set("Take Photo Sample")  # Set initial text
-            Radiobtn1 = ttk.Radiobutton(class_student_frame, textvariable=self.var_radio1, value="Yes")
+            Radiobtn1 = ttk.Radiobutton(class_student_frame, text="Take Photo Sample",variable=self.var_radio1, value="Yes")
             Radiobtn1.grid(row=6, column=0)
 
-            self.var_radio2 = StringVar()
-            self.var_radio2.set("No Photo Sample")  # Set initial text
-            Radiobtn2 = ttk.Radiobutton(class_student_frame, textvariable=self.var_radio2, value="No")
+            Radiobtn2 = ttk.Radiobutton(class_student_frame, text="No Photo Sample",variable=self.var_radio1, value="No")
             Radiobtn2.grid(row=6, column=1)
 
             # Button frame
@@ -224,10 +221,10 @@ class Student:
             update_btn=Button(btn_frame,text="Update",command=self.update_data,width=17,font=("Helvetica", 12, "bold"),bg="black",fg="white")
             update_btn.grid(row=0,column=1)
 
-            delete_btn=Button(btn_frame,text="Delete",width=17,font=("Helvetica", 12, "bold"),bg="black",fg="white")
+            delete_btn=Button(btn_frame,text="Delete",command=self.delete_data,width=17,font=("Helvetica", 12, "bold"),bg="black",fg="white")
             delete_btn.grid(row=0,column=2)
 
-            reset_btn=Button(btn_frame,text="Reset",width=17,font=("Helvetica", 12, "bold"),bg="black",fg="white")
+            reset_btn=Button(btn_frame,text="Reset",command=self.reset_data,width=17,font=("Helvetica", 12, "bold"),bg="black",fg="white")
             reset_btn.grid(row=0,column=3)
 
             btn_frame1=Frame(class_student_frame,bd=2,relief=RIDGE,bg="white")
@@ -339,7 +336,7 @@ class Student:
                   try:
                         conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
                         my_cursor = conn.cursor()
-                        my_cursor.execute("insert into student values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                        my_cursor.execute("insert into student values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                                           (self.var_dep.get(),
                                           self.var_course.get(),
                                           self.var_year.get(),
@@ -410,12 +407,13 @@ class Student:
                               if update:
                                     conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
                                     my_cursor = conn.cursor()
-                                    my_cursor.execute("UPDATE student SET Dep=%s, course=%s, Year=%s, Semester=%s, Division=%s, Roll=%s, Gender=%s, Dob=%s, Email=%s, Phone=%s, Address=%s, Teacher=%s, PhotoSample=%s WHERE Student_id=%s",
+                                    my_cursor.execute("UPDATE student SET Dep=%s, course=%s, Year=%s, Semester=%s, Name=%s, Division=%s, Roll=%s, Gender=%s, Dob=%s, Email=%s, Phone=%s, Address=%s, Teacher=%s, PhotoSample=%s WHERE Student_id=%s",
 
                                                                                                                                                                                                       (     self.var_dep.get(),
                                                                                                                                                                                                             self.var_course.get(),
                                                                                                                                                                                                             self.var_year.get(),
                                                                                                                                                                                                             self.var_semester.get(),
+                                                                                                                                                                                                            self.var_std_name.get(),
                                                                                                                                                                                                             self.var_div.get(),
                                                                                                                                                                                                             self.var_roll.get(),
                                                                                                                                                                                                             self.var_gender.get(),
@@ -439,8 +437,48 @@ class Student:
                         except Exception as e:
                               messagebox.showerror("Error", f"Error: {str(e)}", parent=self.root)
 
+      #=========================== delete function=============================
+      def delete_data(self):
+            if self.var_std_id.get()=="":
+                  messagebox.showerror("Error","Student id must be required" ,parent=self.root)
+            else:
+                  try:
+                        delete=messagebox.askyesno("Student Delete Page","Do you want to delete this student",parent=self.root)
+                        if delete>0:
+                              conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
+                              my_cursor = conn.cursor()
+                              sql="delete from student where Student_id=%s"
+                              val=(self.var_std_id.get(),)
+                              my_cursor.execute(sql,val)
+                        else:
+                              if not delete:
+                                    return 
+                        conn.commit()
+                        self.fetch_data()
+                        conn.close()
+                        messagebox.showinfo("Delete", "Successfully delete student details", parent=self.root)
+                  except Exception as e:
+                              messagebox.showerror("Error", f"Error: {str(e)}", parent=self.root)
 
 
+      #=========================== reset function=============================
+      def reset_data(self):
+            self.var_dep.set("Select Department"),
+            self.var_course.set("Select Course"),
+            self.var_year.set("Select year"),
+            self.var_semester.set("Select Semester"),
+            self.var_std_id.set(""),
+            self.var_std_name.set(""),
+            self.var_div.set("A"),
+            self.var_roll.set("Male"),
+            self.var_gender.set(""),
+            self.var_dob.set(""),
+            self.var_email.set(""),
+            self.var_phone.set(""),
+            self.var_address.set(""),
+            self.var_teacher.set(""),
+            self.var_radio1.set("")
+            
 
 
 if __name__ == "__main__":
