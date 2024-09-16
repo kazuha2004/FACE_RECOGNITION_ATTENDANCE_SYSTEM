@@ -2,7 +2,7 @@ from tkinter import*
 from tkinter import ttk
 from PIL import Image,ImageTk
 from student import Student
-
+import os
 
 
 class Face_Recognition_System:
@@ -13,7 +13,7 @@ class Face_Recognition_System:
             
 
             # IMAGE 1
-            img = Image.open(r"E:\wallpapers\glasses.jpg")
+            img = Image.open(r"D:\wallpapers\glasses.jpg")
             img = img.resize((500,130), Image.BILINEAR)
             self.photoimg = ImageTk.PhotoImage(img)
 
@@ -21,7 +21,7 @@ class Face_Recognition_System:
             f_lbl.place(x=0, y=0, width=500, height=130)
 
             # IMAGE 2   
-            img1 = Image.open(r"E:\wallpapers\ai.jpg")
+            img1 = Image.open(r"D:\wallpapers\ai.jpg")
             img1 = img1.resize((500,130), Image.BILINEAR)
             self.photoimg1 = ImageTk.PhotoImage(img1)
 
@@ -29,7 +29,7 @@ class Face_Recognition_System:
             f_lbl1.place(x=500, y=0, width=500, height=130)
 
             # IMAGE 3
-            img2 = Image.open(r"E:\wallpapers\screen.jpg")
+            img2 = Image.open(r"D:\wallpapers\screen.jpg")
             img2 = img2.resize((500,130), Image.BILINEAR)
             self.photoimg2 = ImageTk.PhotoImage(img2)
 
@@ -38,7 +38,7 @@ class Face_Recognition_System:
 
 
             #bg image
-            bg_img = Image.open(r"E:\wallpapers\background.jpg")
+            bg_img = Image.open(r"D:\wallpapers\background.jpg")
             bg_img = bg_img.resize((1530, 710), Image.BILINEAR)
             self.bg_photoimg = ImageTk.PhotoImage(bg_img)
 
@@ -50,7 +50,7 @@ class Face_Recognition_System:
 
 
             # Student button
-            button_img = Image.open(r"E:\wallpapers\work.jpg")  
+            button_img = Image.open(r"D:\wallpapers\work.jpg")
             button_img = button_img.resize((220, 220), Image.BILINEAR)
             self.photoimg4 = ImageTk.PhotoImage(button_img)
 
@@ -62,7 +62,7 @@ class Face_Recognition_System:
 
 
             # Detect face button
-            button_img1 = Image.open(r"E:\wallpapers\detect.jpg")
+            button_img1 = Image.open(r"D:\wallpapers\detect.jpg")
             button_img1 = button_img1.resize((220, 220), Image.BILINEAR)  # Corrected line
             self.photoimg5 = ImageTk.PhotoImage(button_img1)
 
@@ -74,7 +74,7 @@ class Face_Recognition_System:
 
 
             # Attendance button
-            button_img2 = Image.open(r"E:\wallpapers\attendance.jpg")
+            button_img2 = Image.open(r"D:\wallpapers\attendance.jpg")
             button_img2 = button_img2.resize((220, 220), Image.BILINEAR)
             self.photoimg6 = ImageTk.PhotoImage(button_img2)
 
@@ -86,7 +86,7 @@ class Face_Recognition_System:
 
 
             # Help Desk button
-            button_img3 = Image.open(r"E:\wallpapers\help.jpg")
+            button_img3 = Image.open(r"D:\wallpapers\help.jpg")
             button_img3 = button_img3.resize((220, 220), Image.BILINEAR)
             self.photoimg7 = ImageTk.PhotoImage(button_img3)
 
@@ -98,7 +98,7 @@ class Face_Recognition_System:
 
 
             # Train face button
-            button_img4 = Image.open(r"E:\wallpapers\train.jpg")
+            button_img4 = Image.open(r"D:\wallpapers\train.jpg")
             button_img4 = button_img4.resize((220, 220), Image.BILINEAR)
             self.photoimg8 = ImageTk.PhotoImage(button_img4)
 
@@ -110,19 +110,19 @@ class Face_Recognition_System:
 
 
             # Photos button
-            button_img5 = Image.open(r"E:\wallpapers\Photos.jpg")
+            button_img5 = Image.open(r"D:\wallpapers\Photos.jpg")
             button_img5 = button_img5.resize((220, 220), Image.BILINEAR)
             self.photoimg9 = ImageTk.PhotoImage(button_img5)
 
-            b3 = Button(self.root, image=self.photoimg9, cursor="hand2", bg="black")
+            b3 = Button(self.root, image=self.photoimg9, cursor="hand2", bg="black",command=self.open_img)
             b3.place(x=500, y=480, width=220, height=220)
 
-            b3_1 = Button(self.root, text="Photos", cursor="hand2", font=("Helvetica", 15, "bold"), bg="black", fg="white")
+            b3_1 = Button(self.root,command=self.open_img, text="Photos", cursor="hand2", font=("Helvetica", 15, "bold"), bg="black", fg="white")
             b3_1.place(x=500, y=680, width=220, height=40)
 
 
             # Developer button
-            button_img6 = Image.open(r"E:\wallpapers\developer.jpg")
+            button_img6 = Image.open(r"D:\wallpapers\developer.jpg")
             button_img6 = button_img6.resize((220, 220), Image.BILINEAR)
             self.photoimg10 = ImageTk.PhotoImage(button_img6)
 
@@ -134,7 +134,7 @@ class Face_Recognition_System:
 
 
              #Exit face button
-            button_img7 = Image.open(r"E:\wallpapers\exit.jpg")
+            button_img7 = Image.open(r"D:\wallpapers\exit.jpg")
             button_img7 = button_img7.resize((220, 220), Image.BILINEAR)
             self.photoimg11 = ImageTk.PhotoImage(button_img7)
 
@@ -143,6 +143,11 @@ class Face_Recognition_System:
 
             b3_1 = Button(self.root, text="Exit", cursor="hand2", font=("Helvetica", 15, "bold"), bg="black", fg="white")
             b3_1.place(x=1100, y=680, width=220, height=40)
+
+
+
+      def open_img(self):
+            os.startfile("data")
 
             #=========function button ================
       def student_details(self):
