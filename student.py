@@ -337,7 +337,7 @@ class Student:
                   messagebox.showerror("Error", "All fields are required", parent=self.root)
             else:
                   try:
-                        conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@", database="face_recognition")
+                        conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
                         my_cursor = conn.cursor()
                         my_cursor.execute("insert into student values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                                           (self.var_dep.get(),
@@ -366,7 +366,7 @@ class Student:
 
       #======================Fetch data =============================
       def fetch_data(self):
-            conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@", database="face_recognition")
+            conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
             my_cursor = conn.cursor()
             my_cursor.execute("select * from student")
             data=my_cursor.fetchall()
@@ -410,7 +410,7 @@ class Student:
                         try:
                               update = messagebox.askyesno("Update", "Do you want to update this student's details?", parent=self.root)
                               if update:
-                                    conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@", database="face_recognition")
+                                    conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
                                     my_cursor = conn.cursor()
                                     my_cursor.execute("UPDATE student SET Dep=%s, course=%s, Year=%s, Semester=%s, Name=%s, Division=%s, Roll=%s, Gender=%s, Dob=%s, Email=%s, Phone=%s, Address=%s, Teacher=%s, PhotoSample=%s WHERE Student_id=%s",
 
@@ -450,7 +450,7 @@ class Student:
                   try:
                         delete=messagebox.askyesno("Student Delete Page","Do you want to delete this student",parent=self.root)
                         if delete>0:
-                              conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@", database="face_recognition")
+                              conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
                               my_cursor = conn.cursor()
                               sql="delete from student where Student_id=%s"
                               val=(self.var_std_id.get(),)
@@ -491,7 +491,7 @@ class Student:
                   messagebox.showerror("Error", "All fields are required", parent=self.root)
             else:
                   try:
-                        conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@",database="face_recognition")
+                        conn = mysql.connector.connect(host="localhost", username="root", password="0607",database="face_recognition")
                         my_cursor = conn.cursor()
                         my_cursor.execute("select * from student")
                         myresult=my_cursor.fetchall()
@@ -518,7 +518,7 @@ class Student:
                                                                                                ))
                         conn.commit()
                         self.fetch_data()
-                        self.reset_data()
+                        # self.reset_data()
                         conn.close()
 
                         #  =========== LOAD PREDEFINED DATA ON FACE FRONTALS FROM OPENCV================
@@ -542,7 +542,7 @@ class Student:
                                     img_id+=1
                                     face=cv2.resize(face_cropped(my_frame),(450,450))
                                     face=cv2.cvtColor(face,cv2.COLOR_BGR2GRAY)
-                                    file_name_path="data/user."+str(id)+"."+str(img_id)+".jpg"#.jpg nahi aa raha hai age
+                                    file_name_path = "data/user." + str(id) + "." + str(img_id) + ".jpg" #.jpg nahi aa raha hai age
                                     cv2.imwrite(file_name_path,face)
                                     cv2.putText(face,str(img_id),(50,50),cv2.FONT_HERSHEY_COMPLEX,2,(0,255,0),2)
                                     cv2.imshow("Cropped Face",face)
@@ -551,7 +551,8 @@ class Student:
                                     break
                         cap.release()
                         cv2.destroyAllWindows()
-                        messagebox.showinfo("Result","Generating data sets completed !!!!!!!!")
+                        messagebox.showinfo("Result", "Generating datasets completed. 100 samples captured successfully!", parent=self.root)
+
                   
                   except Exception as e:
                               messagebox.showerror("Error", f"Error: {str(e)}", parent=self.root)
