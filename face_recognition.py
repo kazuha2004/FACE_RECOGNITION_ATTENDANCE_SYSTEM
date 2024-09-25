@@ -44,7 +44,7 @@ class Face_Recognition:
         def draw_boundary(img, classifier, scaleFactor, minNeighbors, color, text, clf):
             gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             features = classifier.detectMultiScale(gray_image, scaleFactor, minNeighbors)
-
+            #PUSH
             coord = []
 
             for (x, y, w, h) in features:
