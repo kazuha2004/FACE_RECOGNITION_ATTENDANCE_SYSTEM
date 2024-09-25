@@ -20,7 +20,7 @@ class Face_Recognition:
         title_lbl.place(x=0, y=0, width=1530, height=45)
 
         # 1st image(LEFT SIDE)
-        img_top = Image.open(r"D:\wallpapers\GOKU.jpg")
+        img_top = Image.open(r"D:\wallpapers\facerecognizer1.jpg")
         img_top = img_top.resize((750, 900), Image.BILINEAR)
         self.photoimg_top = ImageTk.PhotoImage(img_top)
 
@@ -28,7 +28,7 @@ class Face_Recognition:
         f_lbl1.place(x=0, y=50, width=750, height=750)
 
         # 2nd image(RIGHT SIDE)
-        img_bottom = Image.open(r"D:\wallpapers\Madara.jpg")
+        img_bottom = Image.open(r"D:\wallpapers\facerecognizer2.jpg")
         img_bottom = img_bottom.resize((750, 900), Image.BILINEAR)
         self.photoimg_bottom = ImageTk.PhotoImage(img_bottom)
 
@@ -52,7 +52,7 @@ class Face_Recognition:
                 id, predict = clf.predict(gray_image[y:y + h, x:x + w])
                 confidence = int((100 * (1 - predict / 300)))
 
-                conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@", database="face_recognition")
+                conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
                 my_cursor = conn.cursor()
 
                 # Fetch Name
