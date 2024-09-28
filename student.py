@@ -551,7 +551,7 @@ class Student:
                                     break
                         cap.release()
                         cv2.destroyAllWindows()
-                        messagebox.showinfo("Result", "Generating datasets completed. 100 samples captured successfully!", parent=self.root)
+                        messagebox.showinfo("Result", " 100 samples captured successfully!", parent=self.root)
 
                   
                   except Exception as e:
