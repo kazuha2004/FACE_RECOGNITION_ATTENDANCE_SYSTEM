@@ -88,41 +88,41 @@ class Student:
             current_course_frame.place(x=5,y=135,width=720,height=150)
 
             # Department Label
-            dep_label = Label(current_course_frame, text="Department", font=("Helvetica", 12, "bold"), state="disabled")
+            dep_label = Label(current_course_frame, text="Department", font=("Helvetica", 12, "bold"))
             dep_label.grid(row=0, column=0, padx=(10, 20), sticky=W)  
 
             # Department Combobox
-            dep_combo = ttk.Combobox(current_course_frame,textvariable=self.var_dep,font=("Helvetica", 12, "bold"), width=17)
+            dep_combo = ttk.Combobox(current_course_frame,textvariable=self.var_dep,font=("Helvetica", 12, "bold"), width=17, state="readonly")
             dep_combo["value"] = ("Select Department", "Computer", "IT", "Civil", "Mechanical")
             dep_combo.current(0)
             dep_combo.grid(row=0, column=1, padx=(2, 10), pady=10, sticky=W)  
 
             # Course Label
-            course_label = Label(current_course_frame, text="Course", font=("Helvetica", 12, "bold"), state="disabled")
+            course_label = Label(current_course_frame, text="Course", font=("Helvetica", 12, "bold"))
             course_label.grid(row=0, column=2, padx=(10, 20), sticky=W)  
             # Course Combobox
-            course_combo = ttk.Combobox(current_course_frame,textvariable=self.var_course, font=("Helvetica", 12, "bold"), width=17)
+            course_combo = ttk.Combobox(current_course_frame,textvariable=self.var_course, font=("Helvetica", 12, "bold"), width=17, state="readonly")
             course_combo["value"] = ("Select Course", "TE", "SE", "FE", "BE")
             course_combo.current(0)
             course_combo.grid(row=0, column=3, padx=(2, 10), pady=10, sticky=W)  
 
 
             # Year Label
-            year_label = Label(current_course_frame, text="Year", font=("Helvetica", 12, "bold"), state="disabled")
+            year_label = Label(current_course_frame, text="Year", font=("Helvetica", 12, "bold"))
             year_label.grid(row=1, column=0, padx=(10, 20), sticky=W)  
 
             # Year Combobox
-            year_combo = ttk.Combobox(current_course_frame,textvariable=self.var_year, font=("Helvetica", 12, "bold"), width=17)
+            year_combo = ttk.Combobox(current_course_frame,textvariable=self.var_year, font=("Helvetica", 12, "bold"), width=17, state="readonly")
             year_combo["value"] = ("Select year", "2020-21", "2021-22", "2022-23", "2023-24")
             year_combo.current(0)
             year_combo.grid(row=1, column=1, padx=(2, 10), pady=10, sticky=W)  
 
             # Semester Label
-            semester_label = Label(current_course_frame, text="Semester", font=("Helvetica", 12, "bold"), state="disabled")
+            semester_label = Label(current_course_frame, text="Semester", font=("Helvetica", 12, "bold"))
             semester_label.grid(row=1, column=2, padx=(10, 20), sticky=W)
 
             # Semester Combobox
-            semester_combo = ttk.Combobox(current_course_frame,textvariable=self.var_semester, font=("Helvetica", 12, "bold"), width=17)
+            semester_combo = ttk.Combobox(current_course_frame,textvariable=self.var_semester, font=("Helvetica", 12, "bold"), width=17, state="readonly")
             semester_combo["value"] = ("Select Semester", "Semester 1", "Semester 2", "Semester 3", "Semster 4")
             semester_combo.current(0)
             semester_combo.grid(row=1, column=3, padx=(2, 10), pady=10, sticky=W)  
@@ -151,7 +151,7 @@ class Student:
             class_div_label = Label(class_student_frame, text="Class Division:", font=("Helvetica", 12, "bold"))
             class_div_label.grid(row=1, column=0, padx=(10),pady=(5), sticky=W)
 
-            div_combo = ttk.Combobox(class_student_frame,textvariable=self.var_div, font=("Helvetica", 12, "bold"), width=18)
+            div_combo = ttk.Combobox(class_student_frame,textvariable=self.var_div, font=("Helvetica", 12, "bold"), width=18, state="readonly")
             div_combo["value"] = ("A", "B", "C")
             div_combo.current(0)
             div_combo.grid(row=1, column=1, padx=(10), pady=5, sticky=W)  
@@ -167,7 +167,7 @@ class Student:
             gender_label = Label(class_student_frame, text="Gender:", font=("Helvetica", 12, "bold"))
             gender_label.grid(row=2, column=0, padx=(10),pady=(5), sticky=W)
 
-            gender_combo = ttk.Combobox(class_student_frame,textvariable=self.var_gender, font=("Helvetica", 12, "bold"), width=18)
+            gender_combo = ttk.Combobox(class_student_frame,textvariable=self.var_gender, font=("Helvetica", 12, "bold"), width=18, state="readonly")
             gender_combo["value"] = ("Male", "Female", "Others")
             gender_combo.current(0)
             gender_combo.grid(row=2, column=1, padx=(10), pady=5, sticky=W)  
