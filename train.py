@@ -17,7 +17,7 @@ class Train:
             title_lbl = Label(self.root, text=" TRAIN DATA SET", font=("Helvetica", 32, "bold"), bg="black",fg="white")
             title_lbl.place(x=0, y=0, width=1530, height=45)
 
-            img_top = Image.open(r"D:\wallpapers\attendance1.jpg")
+            img_top = Image.open(r"D:\wallpapers\train1.jpg")
             img_top = img_top.resize((1530, 325), Image.BILINEAR)
             self.photoimg_top = ImageTk.PhotoImage(img_top)
 
@@ -32,8 +32,8 @@ class Train:
 
 
 
-            img_bottom = Image.open(r"D:\wallpapers\student3.jpg")
-            img_bottom = img_top.resize((1530, 325), Image.BILINEAR)
+            img_bottom = Image.open(r"D:\wallpapers\train2.jpg")
+            img_bottom = img_bottom.resize((1530, 325), Image.BILINEAR)
             self.photoimg_bottom = ImageTk.PhotoImage(img_bottom)
 
             f_lbl2 = Label(self.root, image=self.photoimg_bottom)
