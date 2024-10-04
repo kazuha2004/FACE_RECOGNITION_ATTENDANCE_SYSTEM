@@ -89,7 +89,7 @@ class Face_Recognition:
 
                     if confidence > 75:  # Recognized face with high confidence
                         # Fetch student details from the database
-                        conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
+                        conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@", database="face_recognition")
                         cursor = conn.cursor()
 
                         cursor.execute("SELECT Name, Roll, Dep FROM student WHERE Student_id=" + str(student_id))
