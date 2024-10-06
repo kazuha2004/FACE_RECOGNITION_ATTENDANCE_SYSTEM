@@ -10,7 +10,7 @@ class ChatBot:
         self.root.bind('<Return>', self.enter_func)  # Binding the Enter key to the send function
 
         # Main frame
-        main_frame = Frame(self.root, bd=4, bg='powder blue', width=610)
+        main_frame = Frame(self.root, bd=4, bg='#2c2f33', width=610)
         main_frame.pack()
 
         # Image loading
@@ -21,43 +21,45 @@ class ChatBot:
         # Title label
         Title_label = Label(main_frame, bd=3, relief=RAISED, anchor='nw', width=730,
                             image=self.photoimg, text='CHAT ME', font=('arial', 30, 'bold'),
-                            fg='green', bg='white', compound='left')
+                            fg='white', bg='#23272a', compound='left')
         Title_label.pack(side=TOP)
 
         # Scrollable Text Box
         self.scroll_y = ttk.Scrollbar(main_frame, orient=VERTICAL)
-        self.text = Text(main_frame, width=65, height=20, bd=20, relief=RAISED,
-                         font=('arial', 14), yscrollcommand=self.scroll_y.set)
+        self.text = Text(main_frame, width=65, height=20, bd=20, relief=RAISED, 
+                         font=('arial', 14), bg='#2c2f33', fg='white', 
+                         yscrollcommand=self.scroll_y.set)
         self.scroll_y.config(command=self.text.yview)
         self.scroll_y.pack(side=RIGHT, fill=Y)
         self.text.pack()
 
         # Button Frame
-        btn_frame = Frame(self.root, bd=4, bg='white', width=730)
+        btn_frame = Frame(self.root, bd=4, bg='#2c2f33', width=730)
         btn_frame.pack()
 
         # Entry Box Label
-        label_1 = Label(btn_frame, text="Type Something", font=('arial', 14, 'bold'), fg='green', bg='white')
+        label_1 = Label(btn_frame, text="Type Something", font=('arial', 14, 'bold'), fg='white', bg='#2c2f33')
         label_1.grid(row=0, column=0, padx=5, sticky=W)
 
         # User Input Field
         self.entry = StringVar()
-        self.entry_field = ttk.Entry(btn_frame, textvariable=self.entry, width=40, font=('times new roman', 16, 'bold'))
+        self.entry_field = ttk.Entry(btn_frame, textvariable=self.entry, width=40, 
+                                     font=('times new roman', 16, 'bold'), foreground='white', background='#23272a')
         self.entry_field.grid(row=0, column=1, padx=5, sticky=W)
 
         # Send Button
-        self.send_btn = Button(btn_frame, text="Send>>", font=('arial', 15, 'bold'), width=8, bg='green',
+        self.send_btn = Button(btn_frame, text="Send>>", font=('arial', 15, 'bold'), width=8, bg='#7289da', fg='white',
                                command=self.send)
         self.send_btn.grid(row=0, column=2, padx=5, sticky=W)
 
         # Clear Chat Button
-        self.clear_btn = Button(btn_frame, text="Clear Chat", font=('arial', 15, 'bold'), width=8, bg='red',
-                                fg='white', command=self.clear_chat)
+        self.clear_btn = Button(btn_frame, text="Clear Chat", font=('arial', 15, 'bold'), width=8, bg='#99aab5',
+                                fg='black', command=self.clear_chat)
         self.clear_btn.grid(row=1, column=0, padx=5, sticky=W)
 
         # Error/Info Label
         self.msg = ''
-        self.label_11 = Label(btn_frame, text=self.msg, font=('arial', 14, 'bold'), fg='red', bg='white')
+        self.label_11 = Label(btn_frame, text=self.msg, font=('arial', 14, 'bold'), fg='red', bg='#2c2f33')
         self.label_11.grid(row=1, column=1, padx=5, sticky=W)
 
     # Function to handle 'Enter' key press

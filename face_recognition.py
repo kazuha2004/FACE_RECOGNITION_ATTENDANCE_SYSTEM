@@ -43,11 +43,11 @@ class Face_Recognition:
     def mark_attendance(self, student_id, roll, name, dep):
         today_date = datetime.now().strftime("%d/%m/%Y")
         marked_today = False
-        
+
         with open("priyanshu.csv", "r+", newline="\n") as f:
             myDataList = f.readlines()
             name_list = []
-            
+
             # Check if attendance is already marked for today
             for line in myDataList:
                 entry = line.split(",")
@@ -62,8 +62,14 @@ class Face_Recognition:
             # Mark attendance if it hasn't been marked for today
             now = datetime.now()
             dtString = now.strftime("%H:%M:%S")
-            f.writelines(f"\n{student_id},{roll},{name},{dep},{dtString},{today_date},Present")
-            print(f"Attendance marked for ID {student_id} ({name})")
+            
+            # Check if current time is after 9:20 AM
+            attendance_status = "Present"
+            if now > now.replace(hour=9, minute=20, second=0, microsecond=0):
+                attendance_status = "Late"
+            
+            f.writelines(f"\n{student_id},{roll},{name},{dep},{dtString},{today_date},{attendance_status}")
+            print(f"Attendance marked as {attendance_status} for ID {student_id} ({name})")
             return True  # Return True indicating attendance was marked
 
     # ======================== FACE RECOGNITION FUNCTION ============================
@@ -89,7 +95,7 @@ class Face_Recognition:
 
                     if confidence > 75:  # Recognized face with high confidence
                         # Fetch student details from the database
-                        conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@", database="face_recognition")
+                        conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
                         cursor = conn.cursor()
 
                         cursor.execute("SELECT Name, Roll, Dep FROM student WHERE Student_id=" + str(student_id))

@@ -102,7 +102,7 @@ class Student:
             course_label.grid(row=0, column=2, padx=(10, 20), sticky=W)  
             # Course Combobox
             course_combo = ttk.Combobox(current_course_frame,textvariable=self.var_course, font=("Helvetica", 12, "bold"), width=17, state="readonly")
-            course_combo["value"] = ("Select Course", "TE", "SE", "FE", "BE")
+            course_combo["value"] = ("Select Course", "First Year Engineering", "Second Year Engineering", "Third Year Engineering", "Bachelor of Engineering")
             course_combo.current(0)
             course_combo.grid(row=0, column=3, padx=(2, 10), pady=10, sticky=W)  
 
@@ -113,7 +113,7 @@ class Student:
 
             # Year Combobox
             year_combo = ttk.Combobox(current_course_frame,textvariable=self.var_year, font=("Helvetica", 12, "bold"), width=17, state="readonly")
-            year_combo["value"] = ("Select year", "2020-21", "2021-22", "2022-23", "2023-24")
+            year_combo["value"] = ("Select year", "2020-21", "2021-22", "2022-23", "2023-24","2024-25","2025-26")
             year_combo.current(0)
             year_combo.grid(row=1, column=1, padx=(2, 10), pady=10, sticky=W)  
 
@@ -123,7 +123,7 @@ class Student:
 
             # Semester Combobox
             semester_combo = ttk.Combobox(current_course_frame,textvariable=self.var_semester, font=("Helvetica", 12, "bold"), width=17, state="readonly")
-            semester_combo["value"] = ("Select Semester", "Semester 1", "Semester 2", "Semester 3", "Semster 4")
+            semester_combo["value"] = ("Select Semester", "Semester 1", "Semester 2", "Semester 3", "Semester 4", "Semester 5", "Semester 6", "Semester 7", "Semester 8")
             semester_combo.current(0)
             semester_combo.grid(row=1, column=3, padx=(2, 10), pady=10, sticky=W)  
 
@@ -337,7 +337,7 @@ class Student:
                   messagebox.showerror("Error", "All fields are required", parent=self.root)
             else:
                   try:
-                        conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@", database="face_recognition")
+                        conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
                         my_cursor = conn.cursor()
                         my_cursor.execute("insert into student values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                                           (self.var_dep.get(),
@@ -366,7 +366,7 @@ class Student:
 
       #======================Fetch data =============================
       def fetch_data(self):
-            conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@", database="face_recognition")
+            conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
             my_cursor = conn.cursor()
             my_cursor.execute("select * from student")
             data=my_cursor.fetchall()
@@ -410,7 +410,7 @@ class Student:
                         try:
                               update = messagebox.askyesno("Update", "Do you want to update this student's details?", parent=self.root)
                               if update:
-                                    conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@", database="face_recognition")
+                                    conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
                                     my_cursor = conn.cursor()
                                     my_cursor.execute("UPDATE student SET Dep=%s, course=%s, Year=%s, Semester=%s, Name=%s, Division=%s, Roll=%s, Gender=%s, Dob=%s, Email=%s, Phone=%s, Address=%s, Teacher=%s, PhotoSample=%s WHERE Student_id=%s",
 
@@ -450,7 +450,7 @@ class Student:
                   try:
                         delete=messagebox.askyesno("Student Delete Page","Do you want to delete this student",parent=self.root)
                         if delete>0:
-                              conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@", database="face_recognition")
+                              conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
                               my_cursor = conn.cursor()
                               sql="delete from student where Student_id=%s"
                               val=(self.var_std_id.get(),)
@@ -491,7 +491,7 @@ class Student:
                   messagebox.showerror("Error", "All fields are required", parent=self.root)
             else:
                   try:
-                        conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@",database="face_recognition")
+                        conn = mysql.connector.connect(host="localhost", username="root", password="0607",database="face_recognition")
                         my_cursor = conn.cursor()
                         my_cursor.execute("select * from student")
                         myresult=my_cursor.fetchall()
