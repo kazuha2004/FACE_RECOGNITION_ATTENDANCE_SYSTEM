@@ -15,6 +15,9 @@ class Face_Recognition:
         title_lbl = Label(self.root, text="FACE RECOGNITION", font=("Helvetica", 32, "bold"), bg="black", fg="white")
         title_lbl.place(x=0, y=0, width=1530, height=45)
 
+        back_btn = Button(root, text="Back", command=self.go_back, font=("Helvetica", 12), bg='gray', fg='white')
+        back_btn.place(x=1400, y=9, width=80, height=30)  # Adjust x and y for positioning
+
         # Simplified image loading for testing
         try:
             # 1st image (LEFT SIDE)
@@ -93,7 +96,7 @@ class Face_Recognition:
                     student_id, predict = clf.predict(gray[y:y + h, x:x + w])
                     confidence = int((100 * (1 - predict / 300)))
 
-                    if confidence > 75:  # Recognized face with high confidence
+                    if confidence > 78:  # Recognized face with high confidence
                         # Fetch student details from the database
                         conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
                         cursor = conn.cursor()
@@ -134,6 +137,14 @@ class Face_Recognition:
 
         except Exception as e:
             print(f"Error during recognition: {str(e)}")
+    
+    def go_back(self):
+            try:
+                  # Close the current window (student.py)
+                  self.root.destroy()
+            except Exception as e:
+                  print(f"Error when trying to close the window: {e}")       
+
 
 
 if __name__ == "__main__":

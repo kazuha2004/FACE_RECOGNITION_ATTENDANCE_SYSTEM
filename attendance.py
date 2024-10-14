@@ -54,6 +54,9 @@ class Attendance:
                           font=("Helvetica", 32, "bold"), bg="black", fg="white")
         title_lbl.place(x=0, y=130, width=1530, height=45)
 
+        back_btn = Button(root, text="Back", command=self.go_back, font=("Helvetica", 12), bg='gray', fg='white')
+        back_btn.place(x=1400, y=138, width=80, height=30)  # Adjust x and y for positioning
+
         # Main Frame
         main_frame = Frame(root, bd=2, bg="white")
         main_frame.place(x=10, y=180, width=1480, height=600)
@@ -246,6 +249,13 @@ class Attendance:
         self.var_atten_time.set("")
         self.var_atten_date.set("")
         self.var_atten_attendance.set("Status")
+
+    def go_back(self):
+        """Close the current window."""
+        try:
+            self.root.destroy()  # Close the window
+        except Exception as e:
+            print(f"Error when trying to close the window: {e}")
 
 
 

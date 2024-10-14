@@ -11,6 +11,10 @@ class Developer:
         self.root.geometry("1500x790+0+0")
         self.root.configure(bg="#f4f4f9")  # Light gray background for better contrast
 
+        # Using ttk.Button for consistency
+        back_btn = ttk.Button(root, text="Back", command=self.go_back, style="TButton")
+        back_btn.place(x=1400, y=9, width=80, height=30)  # Adjust x and y for positioning
+
         # Sample data list
         self.sample_data = []
 
@@ -36,9 +40,9 @@ class Developer:
         # Button style
         style.configure("TButton",
                         font=("Helvetica", 12),
-                        padding=10,
-                        background="#0984e3",
-                        foreground="white")
+                        padding=4,
+                        bg='gray',
+                        fg='white')
 
     def setup_ui(self):
         """Set up the UI with buttons, treeview, and graph."""
@@ -114,6 +118,13 @@ class Developer:
         canvas = FigureCanvasTkAgg(fig, master=self.graph_frame)
         canvas.draw()
         canvas.get_tk_widget().pack()
+
+    def go_back(self):
+        """Close the current window."""
+        try:
+            self.root.destroy()  # Close the window
+        except Exception as e:
+            print(f"Error when trying to close the window: {e}")
 
 if __name__ == "__main__":
     root = tk.Tk()

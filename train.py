@@ -1,7 +1,6 @@
-
-from tkinter import*
+from tkinter import *
 from tkinter import ttk
-from PIL import Image,ImageTk
+from PIL import Image, ImageTk
 from tkinter import messagebox
 import mysql.connector
 import os
@@ -9,64 +8,81 @@ import numpy as np
 import cv2
 
 class Train:
-      def __init__(self,root):
-            self.root=root
-            self.root.geometry("1500x790+0+0")
-            self.root.title("Face Recognition System")
+    def __init__(self, root):
+        self.root = root
+        self.root.geometry("1500x790+0+0")
+        self.root.title("Face Recognition System")
 
-            title_lbl = Label(self.root, text=" TRAIN DATA SET", font=("Helvetica", 32, "bold"), bg="black",fg="white")
-            title_lbl.place(x=0, y=0, width=1530, height=45)
+        # Set a black background for the entire window
+        self.root.configure(bg="black")
 
-            img_top = Image.open(r"D:\wallpapers\train1.jpg")
-            img_top = img_top.resize((1530, 325), Image.BILINEAR)
-            self.photoimg_top = ImageTk.PhotoImage(img_top)
+        # Title label with black background and white text
+        title_lbl = Label(self.root, text="TRAIN DATA SET", font=("Helvetica", 32, "bold"), bg="black", fg="white")
+        title_lbl.place(x=0, y=0, width=1500, height=50)
 
-            f_lbl2 = Label(self.root, image=self.photoimg_top)
-            f_lbl2.place(x=0, y=45, width=1530, height=325)
+        back_btn = Button(root, text="Back", command=self.go_back, font=("Helvetica", 12), bg='gray', fg='white')
+        back_btn.place(x=1400, y=13, width=80, height=30)  # Adjust x and y for positioning
 
-            #==================BUTTON=======================
+        # Load and place top image
+        img_top = Image.open(r"D:\wallpapers\train1.jpg")
+        img_top = img_top.resize((1450, 300), Image.BILINEAR)
+        self.photoimg_top = ImageTk.PhotoImage(img_top)
 
-            b3_1 = Button(self.root, text="TRAIN DATA", command=self.train_classifier,cursor="hand2", font=("Helvetica", 30, "bold"), bg="black",fg="white")
-            b3_1.place(x=0, y=380, width=1530, height=60)#BUTTON UPER SIDE SHIFT KARNA PADEGA THODA YA PHIR UPAR VALI IMAGE KO NICHE KARNA PADEGA THODA SO PLEASE REMEMBER TO MAKE THE CHANGES IN FUTURE..........
+        # Top image with dark border
+        f_lbl_top = Label(self.root, image=self.photoimg_top, bd=2, relief=RIDGE, bg="black")
+        f_lbl_top.place(x=25, y=60, width=1450, height=300)
 
+        # Train button with modern black styling
+        b3_1 = Button(self.root, text="TRAIN DATA", command=self.train_classifier, cursor="hand2", 
+                      font=("Helvetica", 28, "bold"), bg="gray20", fg="white", activebackground="gray30", 
+                      activeforeground="white", bd=5, relief=GROOVE)
+        b3_1.place(x=500, y=380, width=500, height=70)
 
+        # Load and place bottom image
+        img_bottom = Image.open(r"D:\wallpapers\train2.jpg")
+        img_bottom = img_bottom.resize((1450, 300), Image.BILINEAR)
+        self.photoimg_bottom = ImageTk.PhotoImage(img_bottom)
 
+        # Bottom image with dark border
+        f_lbl_bottom = Label(self.root, image=self.photoimg_bottom, bd=2, relief=RIDGE, bg="black")
+        f_lbl_bottom.place(x=25, y=470, width=1450, height=300)
 
-            img_bottom = Image.open(r"D:\wallpapers\train2.jpg")
-            img_bottom = img_bottom.resize((1530, 325), Image.BILINEAR)
-            self.photoimg_bottom = ImageTk.PhotoImage(img_bottom)
+    # Function to train classifier
+    def train_classifier(self):
+        data_dir = "data"
+        path = [os.path.join(data_dir, file) for file in os.listdir(data_dir)]
+        faces = []
+        ids = []
 
-            f_lbl2 = Label(self.root, image=self.photoimg_bottom)
-            f_lbl2.place(x=0, y=440, width=1530, height=325)
+        for image in path:
+            img = Image.open(image).convert('L')  # Convert to grayscale
+            imageNp = np.array(img, 'uint8')
+            id = int(os.path.split(image)[1].split('.')[1])
 
-          #======================LBPH IS PRESENT HERE===================
-      def train_classifier(self):
-            data_dir="data"
-            path=[os.path.join(data_dir,file) for file in os.listdir(data_dir)]
-            faces=[]
-            ids=[]
-            for image in path:
-                  img=Image.open(image).convert('L')# CONVERTING TO GRAY SCALE IMAGE
-                  imageNp=np.array(img,'uint8')
-                  id = int(os.path.split(image)[1].split('.')[1])
-                  faces.append(imageNp)
-                  ids.append(id)
-                  cv2.imshow("TRAINING",imageNp)
-                  cv2.waitKey(1)==13
-            ids=np.array(ids)
+            faces.append(imageNp)
+            ids.append(id)
 
+            cv2.imshow("Training", imageNp)
+            cv2.waitKey(1) == 13
+        ids = np.array(ids)
 
-          #======================TRAIN THE CLASSIFIER AND SAVE=============================
-            clf=cv2.face.LBPHFaceRecognizer_create()#pip install opencv-contrib-python   WARNA ERROR DEGA
-            clf.train(faces,ids)
-            clf.write("classifier.xml")
-            cv2.destroyAllWindows()
-            messagebox.showinfo("RESULT","TRAINING DATASET COMPLETED")
-
+        # Train the classifier and save it
+        clf = cv2.face.LBPHFaceRecognizer_create()
+        clf.train(faces, ids)
+        clf.write("classifier.xml")
+        cv2.destroyAllWindows()
+        messagebox.showinfo("RESULT", "Training dataset completed")
+    
+    def go_back(self):
+            try:
+                  # Close the current window (student.py)
+                  self.root.destroy()
+            except Exception as e:
+                  print(f"Error when trying to close the window: {e}")       
 
 
 
 if __name__ == "__main__":
-      root=Tk()
-      obj=Train(root)
-      root.mainloop()
+    root = Tk()
+    obj = Train(root)
+    root.mainloop()

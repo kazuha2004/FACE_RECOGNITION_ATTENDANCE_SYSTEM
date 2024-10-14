@@ -20,8 +20,6 @@ class Face_Recognition_System:
         self.chatbot_window = None  # To keep track of the ChatBot window
         self.chatbot_open = False  # Flag to check if ChatBot is open
 
-        self.login_window = None  # To keep track of the Login window
-        self.login_open = False  # Flag to check if Login window is open
 
         # IMAGE 1
         img = Image.open(r"D:\wallpapers\glasses.jpg")
@@ -146,9 +144,6 @@ class Face_Recognition_System:
         b3_1 = Button(self.root, text="Exit", command=self.exit_program, cursor="hand2", font=("Helvetica", 15, "bold"), bg="black", fg="white")
         b3_1.place(x=1100, y=680, width=220, height=40)
 
-        # Login button in the top-right corner with toggle functionality
-        login_button = Button(self.root, text="Login", cursor="hand2", font=("Helvetica", 12, "bold"), bg="white", fg="black", command=self.toggle_login)
-        login_button.place(x=1430, y=5, width=60, height=40)
 
     def toggle_chat_bot(self):
         if not self.chatbot_open:
@@ -165,22 +160,6 @@ class Face_Recognition_System:
         if self.chatbot_open:
             self.chatbot_open = False
             self.chatbot_window.destroy()
-
-    def toggle_login(self):
-        if not self.login_open:
-            self.login_window = Toplevel(self.root)
-            self.app = LoginSystem(self.login_window)
-            self.login_open = True
-
-            # Close login window when window is destroyed
-            self.login_window.protocol("WM_DELETE_WINDOW", self.close_login)
-        else:
-            self.close_login()
-
-    def close_login(self):
-        if self.login_open:
-            self.login_open = False
-            self.login_window.destroy()
 
     def student_details(self):
         self.new_window = Toplevel(self.root)

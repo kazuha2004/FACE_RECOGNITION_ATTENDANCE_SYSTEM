@@ -6,6 +6,8 @@ from tkinter import ttk
 from PIL import Image,ImageTk
 from tkinter import messagebox
 import mysql.connector
+import subprocess
+import os
 
 
 
@@ -68,6 +70,8 @@ class Student:
             title_lbl = Label(root, text="STUDENT MANAGEMENT",font=("Helvetica", 32, "bold" , "underline"), bg="black", fg="white")
             title_lbl.place(x=0,y=130,width=1530,height=45)
 
+            back_btn = Button(root, text="Back", command=self.go_back, font=("Helvetica", 12), bg='gray', fg='white')
+            back_btn.place(x=1400, y=140, width=80, height=30)  # Adjust x and y for positioning
 
             main_frame=Frame(root,bd=2,bg="white")
             main_frame.place(x=10,y=180,width=1480,height=600)
@@ -556,7 +560,14 @@ class Student:
                   
                   except Exception as e:
                               messagebox.showerror("Error", f"Error: {str(e)}", parent=self.root)
-                  
+
+
+      def go_back(self):
+            try:
+                  # Close the current window (student.py)
+                  self.root.destroy()
+            except Exception as e:
+                  print(f"Error when trying to close the window: {e}")       
 
 
                         
