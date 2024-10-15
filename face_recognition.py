@@ -1,10 +1,11 @@
 from tkinter import *
 from PIL import Image, ImageTk
 from time import strftime
-from datetime import datetime
+from datetime import datetime, timedelta
 import cv2
 import mysql.connector
 import numpy as np
+import os
 
 class Face_Recognition:
     def __init__(self, root):
@@ -41,12 +42,21 @@ class Face_Recognition:
 
     # ======================== ATTENDANCE MARKING FUNCTION ============================
     def mark_attendance(self, student_id, roll, name, dep):
-        today_date = datetime.now().strftime("%d/%m/%Y")
+        today_date = datetime.now().strftime("%d-%m-%Y")  # Use hyphens for date
         marked_today = False
+
+        # Path for attendance data
+        attendance_dir = 'attendance_data'
+        if not os.path.exists(attendance_dir):
+            os.makedirs(attendance_dir)
+
+        # Creating the file path with today's date
+        file_path = os.path.join(attendance_dir, f"{today_date}.csv")
 
         # Open file for attendance, create if it doesn't exist
         try:
-            with open("priyanshu.csv", "r+", newline="\n") as f:
+            with open(file_path, "a+", newline="\n") as f:  # Use "a+" mode for appending
+                f.seek(0)  # Move to the beginning of the file
                 myDataList = f.readlines()
                 name_list = []
 
@@ -82,12 +92,11 @@ class Face_Recognition:
                     if times["start"] <= now < times["late"]:
                         attendance_status = "Present"
                         current_period = period
-                    elif times["late"] <= now < times["late"].replace(minute=times["late"].minute + 35):
+                    elif times["late"] <= now < times["late"] + timedelta(minutes=35):
                         attendance_status = "Late"
                         current_period = period
 
                 if current_period:
-                    # Use write instead of writelines to avoid empty lines
                     f.write(f"{student_id},{roll},{name},{dep},{dtString},{today_date},Period {current_period},{attendance_status}\n")
                     print(f"Attendance marked as {attendance_status} for ID {student_id} ({name}) at {dtString} for Period {current_period}")
                     return True
@@ -95,11 +104,8 @@ class Face_Recognition:
                     print("No active period found for marking attendance.")
                     return False
 
-        except FileNotFoundError:
-            print("Attendance file not found. Creating a new one.")
-            with open("priyanshu.csv", "w", newline="\n") as f:
-                f.write("StudentID,Roll,Name,Department,Time,Date,Period,Status\n")  # Write header
-            return self.mark_attendance(student_id, roll, name, dep)  # Call the method again to write attendance
+        except Exception as e:
+            print(f"Error handling attendance file: {str(e)}")
 
     # ======================== FACE RECOGNITION FUNCTION ============================
     def start_recognition(self):
