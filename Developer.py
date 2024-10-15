@@ -9,11 +9,11 @@ class Developer:
         self.root = root
         self.root.title("Attendance Report")
         self.root.geometry("1500x790+0+0")
-        self.root.configure(bg="#f4f4f9")  # Light gray background for better contrast
+        self.root.configure(bg="#f4f4f9")
 
-        # Using ttk.Button for consistency
+        # Back button
         back_btn = ttk.Button(root, text="Back", command=self.go_back, style="TButton")
-        back_btn.place(x=1400, y=9, width=80, height=30)  # Adjust x and y for positioning
+        back_btn.place(x=1400, y=9, width=80, height=30)
 
         # Sample data list
         self.sample_data = []
@@ -25,17 +25,16 @@ class Developer:
         self.setup_ui()
 
     def setup_style(self):
-        """Configure style for ttk widgets."""
         style = ttk.Style()
-        style.theme_use("clam")  # Using a modern theme
+        style.theme_use("clam")
         
         # Treeview style
         style.configure("Treeview",
-                        background="#dfe6e9",  # light background for treeview rows
+                        background="#dfe6e9",
                         foreground="black",
                         rowheight=30,
-                        fieldbackground="#dfe6e9")  # Background of cells
-        style.map("Treeview", background=[('selected', '#74b9ff')])  # Blue color on select
+                        fieldbackground="#dfe6e9")
+        style.map("Treeview", background=[('selected', '#74b9ff')])
 
         # Button style
         style.configure("TButton",
@@ -45,7 +44,6 @@ class Developer:
                         fg='white')
 
     def setup_ui(self):
-        """Set up the UI with buttons, treeview, and graph."""
         # Import button
         self.import_button = ttk.Button(self.root, text="Import CSV", command=self.import_csv)
         self.import_button.pack(pady=20)
@@ -54,14 +52,16 @@ class Developer:
         tree_frame = tk.Frame(self.root, bg="#f4f4f9")
         tree_frame.pack(pady=20, padx=20, expand=True, fill="both")
 
-        self.report_tree = ttk.Treeview(tree_frame, columns=("ID", "Student ID", "Student Name", "Class ID", "Time", "Date", "Status"), show="headings")
-        self.report_tree.heading("ID", text="ID")
+        # Updated: Added "Period" as a new column
+        self.report_tree = ttk.Treeview(tree_frame, columns=("Student ID", "Class ID", "Student Name", "Department", "Time", "Date", "Status", "Period"), show="headings")
         self.report_tree.heading("Student ID", text="Student ID")
-        self.report_tree.heading("Student Name", text="Student Name")
         self.report_tree.heading("Class ID", text="Class ID")
+        self.report_tree.heading("Student Name", text="Student Name")
+        self.report_tree.heading("Department", text="Department")  # Assuming this is the 4th column from the CSV
         self.report_tree.heading("Time", text="Time")
         self.report_tree.heading("Date", text="Date")
         self.report_tree.heading("Status", text="Status")
+        self.report_tree.heading("Period", text="Period")  # New column for "Period"
         self.report_tree.pack(expand=True, fill="both")
 
         # Graph Frame
@@ -78,15 +78,23 @@ class Developer:
                 for item in self.report_tree.get_children():
                     self.report_tree.delete(item)
 
-                # Read the CSV file
+                # Read the CSV file (DO NOT SKIP THE FIRST ROW)
                 with open(file_path, mode='r') as file:
                     reader = csv.reader(file)
-                    next(reader)  # Skip header row
+
                     for row in reader:
-                        # Assuming CSV structure: ID, Student ID, Student Name, Class ID, Time, Date, Status
-                        if len(row) == 7:
+                        # Debugging: Print the row being read
+                        print(f"Row: {row}")
+
+                        # Check for valid row length (expecting 8 columns: Student ID, Class ID, Student Name, Department, Time, Date, Status, Period)
+                        if len(row) == 8:
+                            # Insert all 8 values into sample data
                             self.sample_data.append(tuple(row))
+
+                            # Insert all 8 values into Treeview
                             self.report_tree.insert("", tk.END, values=row)
+                        else:
+                            print(f"Skipping invalid row: {row}")
 
                 # Generate the graph based on the imported data
                 self.show_graph()
@@ -96,19 +104,31 @@ class Developer:
 
     def show_graph(self):
         """Function to generate a graph based on the attendance data."""
-        # Count the attendance statuses
-        present_count = sum(1 for row in self.sample_data if row[6].lower() == "present")
-        absent_count = sum(1 for row in self.sample_data if row[6].lower() == "absent")
-        late_count = sum(1 for row in self.sample_data if row[6].lower() == "late")
+        # Initialize a dictionary to count attendance statuses by period
+        periods = {f"Period {i}": {'Present': 0, 'Absent': 0, 'Late': 0} for i in range(1, 9)}
 
-        # Create a bar chart
-        labels = ['Present', 'Absent', 'Late']
-        counts = [present_count, absent_count, late_count]
+        # Populate the period data
+        for row in self.sample_data:
+            period = row[7]  # Period is now the 8th element in the row
+            status = row[6].capitalize()  # Status: Present, Absent, Late
+            if period in periods and status in periods[period]:
+                periods[period][status] += 1
 
-        fig, ax = plt.subplots(figsize=(6, 4))
-        ax.bar(labels, counts, color=['#55efc4', '#ff7675', '#ffeaa7'])
-        ax.set_ylabel('Count')
-        ax.set_title('Attendance Status')
+        # Create a stacked bar chart for each period
+        labels = list(periods.keys())
+        present_count = [periods[period]['Present'] for period in labels]
+        absent_count = [periods[period]['Absent'] for period in labels]
+        late_count = [periods[period]['Late'] for period in labels]
+
+        fig, ax = plt.subplots(figsize=(8, 6))
+
+        ax.bar(labels, present_count, label='Present', color='#55efc4')
+        ax.bar(labels, absent_count, label='Absent', color='#ff7675', bottom=present_count)
+        ax.bar(labels, late_count, label='Late', color='#ffeaa7', bottom=[i + j for i, j in zip(present_count, absent_count)])
+
+        ax.set_ylabel('Number of Students')
+        ax.set_title('Attendance by Period')
+        ax.legend()
 
         # Clear previous graph
         for widget in self.graph_frame.winfo_children():

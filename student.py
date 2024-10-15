@@ -237,7 +237,7 @@ class Student:
             btn_frame1=Frame(class_student_frame,bd=2,relief=RIDGE,bg="white")
             btn_frame1.place(x=0,y=245,width=717,height=35)
 
-            take_photo_btn=Button(btn_frame1,command=self.generte_dataset,text="Take Photo Sample",width=35,font=("Helvetica", 12, "bold"),bg="black",fg="white")
+            take_photo_btn=Button(btn_frame1,command=self.generate_dataset,text="Take Photo Sample",width=35,font=("Helvetica", 12, "bold"),bg="black",fg="white")
             take_photo_btn.grid(row=0,column=0)
 
             update_photo_btn=Button(btn_frame1,text="Update Photo Sample",width=35,font=("Helvetica", 12, "bold"),bg="black",fg="white")
@@ -490,76 +490,91 @@ class Student:
 
 
       #==========GENERATE DATA SET OR TAKE PHOTO SAMPLE=================
-      def  generte_dataset(self):
+      def generate_dataset(self):
             if self.var_dep.get() == "Select Department" or self.var_std_name.get() == "" or self.var_std_id.get() == "":
                   messagebox.showerror("Error", "All fields are required", parent=self.root)
             else:
                   try:
-                        conn = mysql.connector.connect(host="localhost", username="root", password="0607",database="face_recognition")
-                        my_cursor = conn.cursor()
-                        my_cursor.execute("select * from student")
-                        myresult=my_cursor.fetchall()
-                        id=0
-                        for x in myresult:
-                              id+=1
-                        my_cursor.execute("UPDATE student SET Dep=%s, course=%s, Year=%s, Semester=%s, Name=%s, Division=%s, Roll=%s, Gender=%s, Dob=%s, Email=%s, Phone=%s, Address=%s, Teacher=%s, PhotoSample=%s WHERE Student_id=%s",
-
-                                                                                                      (self.var_dep.get(),
-                                                                                                       self.var_course.get(),
-                                                                                                       self.var_year.get(),
-                                                                                                       self.var_semester.get(),
-                                                                                                       self.var_std_name.get(),
-                                                                                                       self.var_div.get(),
-                                                                                                       self.var_roll.get(),
-                                                                                                       self.var_gender.get(),
-                                                                                                       self.var_dob.get(),
-                                                                                                       self.var_email.get(),
-                                                                                                       self.var_phone.get(),
-                                                                                                       self.var_address.get(),
-                                                                                                       self.var_teacher.get(),
-                                                                                                       self.var_radio1.get(),
-                                                                                                       self.var_std_id.get()==id+1
-                                                                                               ))
-                        conn.commit()
-                        self.fetch_data()
-                        # self.reset_data()
-                        conn.close()
-
-                        #  =========== LOAD PREDEFINED DATA ON FACE FRONTALS FROM OPENCV================
-                        face_classifier=cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
-
-
-                        def face_cropped(img):
-                              gray=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-                              faces=face_classifier.detectMultiScale(gray,1.3,5)
-                              #scalling factor=1.3
-                              #Minimum Neighbour=5
-                              for (x,y,w,h) in faces:
-                                    face_cropped=img[y: y+h, x:x+w]
-                                    return face_cropped
-                        cap=cv2.VideoCapture(0)
-                        img_id=0
-                        while True:
-
-                              ret,my_frame=cap.read()
-                              if face_cropped(my_frame) is not None:
-                                    img_id+=1
-                                    face=cv2.resize(face_cropped(my_frame),(450,450))
-                                    face=cv2.cvtColor(face,cv2.COLOR_BGR2GRAY)
-                                    file_name_path = "data/user." + str(id) + "." + str(img_id) + ".jpg" #.jpg nahi aa raha hai age
-                                    cv2.imwrite(file_name_path,face)
-                                    cv2.putText(face,str(img_id),(50,50),cv2.FONT_HERSHEY_COMPLEX,2,(0,255,0),2)
-                                    cv2.imshow("Cropped Face",face)
-
-                              if cv2.waitKey(1)==13 or int(img_id)==100:
-                                    break
-                        cap.release()
-                        cv2.destroyAllWindows()
-                        messagebox.showinfo("Result", " 100 samples captured successfully!", parent=self.root)
-
+                              conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
+                              my_cursor = conn.cursor()
                   
+                              # Ensure the correct student ID is used for saving images
+                              student_id = self.var_std_id.get()
+                  
+                              # Check if student already exists (if needed, based on your logic)
+                              my_cursor.execute("SELECT * FROM student WHERE Student_id=%s", (student_id,))
+                              result = my_cursor.fetchone()
+                              if result is None:
+                                    messagebox.showerror("Error", "Student ID not found in the database", parent=self.root)
+                                    return
+
+                              # Update student data (if required)
+                              my_cursor.execute(
+                                    "UPDATE student SET Dep=%s, course=%s, Year=%s, Semester=%s, Name=%s, Division=%s, Roll=%s, Gender=%s, Dob=%s, Email=%s, Phone=%s, Address=%s, Teacher=%s, PhotoSample=%s WHERE Student_id=%s",
+                              (
+                                    self.var_dep.get(),
+                                    self.var_course.get(),
+                                    self.var_year.get(),
+                                    self.var_semester.get(),
+                                    self.var_std_name.get(),
+                                    self.var_div.get(),
+                                    self.var_roll.get(),
+                                    self.var_gender.get(),
+                                    self.var_dob.get(),
+                                    self.var_email.get(),
+                                    self.var_phone.get(),
+                                    self.var_address.get(),
+                                    self.var_teacher.get(),
+                                    self.var_radio1.get(),
+                                    student_id
+                              )
+                        )
+                  
+                              conn.commit()
+                              self.fetch_data()
+                              conn.close()
+
+                              # Load predefined data for face detection
+                              face_classifier = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+
+                              # Function to crop the face from the frame
+                              def face_cropped(img):
+                                    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                                    faces = face_classifier.detectMultiScale(gray, 1.3, 5)
+                                    for (x, y, w, h) in faces:
+                                          face_cropped = img[y: y + h, x: x + w]
+                                          return face_cropped
+                                    return None
+
+                              # Start capturing video from the webcam
+                              cap = cv2.VideoCapture(0)
+                              img_id = 0
+                              while True:
+                                    ret, my_frame = cap.read()
+                                    if face_cropped(my_frame) is not None:
+                                          img_id += 1
+                                          face = cv2.resize(face_cropped(my_frame), (450, 450))
+                                          face = cv2.cvtColor(face, cv2.COLOR_BGR2GRAY)
+
+                                          # Save the image file with the student ID (e.g., "data/user.2211379.1.jpg")
+                                          file_name_path = f"data/user.{student_id}.{img_id}.jpg"
+                                          cv2.imwrite(file_name_path, face)
+
+                                          # Display progress on the frame
+                                          cv2.putText(face, str(img_id), (50, 50), cv2.FONT_HERSHEY_COMPLEX, 2, (0, 255, 0), 2)
+                                          cv2.imshow("Cropped Face", face)
+
+                                    # Break when 100 images have been captured or Enter key is pressed
+                                    if cv2.waitKey(1) == 13 or int(img_id) == 100:
+                                          break
+
+                              cap.release()
+                              cv2.destroyAllWindows()
+                              messagebox.showinfo("Result", "100 samples captured successfully!", parent=self.root)
+
                   except Exception as e:
-                              messagebox.showerror("Error", f"Error: {str(e)}", parent=self.root)
+                        messagebox.showerror("Error", f"Error: {str(e)}", parent=self.root)
+
 
 
       def go_back(self):
