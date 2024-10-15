@@ -52,16 +52,16 @@ class Developer:
         tree_frame = tk.Frame(self.root, bg="#f4f4f9")
         tree_frame.pack(pady=20, padx=20, expand=True, fill="both")
 
-        # Updated: Added "Period" as a new column
-        self.report_tree = ttk.Treeview(tree_frame, columns=("Student ID", "Class ID", "Student Name", "Department", "Time", "Date", "Status", "Period"), show="headings")
+        # Treeview columns and headings
+        self.report_tree = ttk.Treeview(tree_frame, columns=("Student ID", "Class ID", "Student Name", "Department", "Time", "Date", "Period","Status"), show="headings")
         self.report_tree.heading("Student ID", text="Student ID")
         self.report_tree.heading("Class ID", text="Class ID")
         self.report_tree.heading("Student Name", text="Student Name")
-        self.report_tree.heading("Department", text="Department")  # Assuming this is the 4th column from the CSV
+        self.report_tree.heading("Department", text="Department")
         self.report_tree.heading("Time", text="Time")
         self.report_tree.heading("Date", text="Date")
+        self.report_tree.heading("Period", text="Period")
         self.report_tree.heading("Status", text="Status")
-        self.report_tree.heading("Period", text="Period")  # New column for "Period"
         self.report_tree.pack(expand=True, fill="both")
 
         # Graph Frame
@@ -78,20 +78,14 @@ class Developer:
                 for item in self.report_tree.get_children():
                     self.report_tree.delete(item)
 
-                # Read the CSV file (DO NOT SKIP THE FIRST ROW)
+                # Read the CSV file
                 with open(file_path, mode='r') as file:
                     reader = csv.reader(file)
-
                     for row in reader:
-                        # Debugging: Print the row being read
-                        print(f"Row: {row}")
-
-                        # Check for valid row length (expecting 8 columns: Student ID, Class ID, Student Name, Department, Time, Date, Status, Period)
+                        # Check for valid row length (expecting 8 columns)
                         if len(row) == 8:
-                            # Insert all 8 values into sample data
+                            # Insert data into the sample list and Treeview
                             self.sample_data.append(tuple(row))
-
-                            # Insert all 8 values into Treeview
                             self.report_tree.insert("", tk.END, values=row)
                         else:
                             print(f"Skipping invalid row: {row}")
@@ -109,16 +103,27 @@ class Developer:
 
         # Populate the period data
         for row in self.sample_data:
-            period = row[7]  # Period is now the 8th element in the row
-            status = row[6].capitalize()  # Status: Present, Absent, Late
+            period = row[6].strip()  # Period is the 7th element in the row
+            status = row[7].strip().capitalize()  # Status: Present, Absent, Late
+            
+            # Debugging: Print the status and period being counted
+            print(f"Counting {status} for {period}")
+
             if period in periods and status in periods[period]:
                 periods[period][status] += 1
+            else:
+                print(f"Unrecognized period or status: {period}, {status}")
 
         # Create a stacked bar chart for each period
         labels = list(periods.keys())
         present_count = [periods[period]['Present'] for period in labels]
         absent_count = [periods[period]['Absent'] for period in labels]
         late_count = [periods[period]['Late'] for period in labels]
+
+        # Debugging: Print counts for each period
+        print("Present counts:", present_count)
+        print("Absent counts:", absent_count)
+        print("Late counts:", late_count)
 
         fig, ax = plt.subplots(figsize=(8, 6))
 
