@@ -99,12 +99,12 @@ class Developer:
     def show_graph(self):
         """Function to generate a graph based on the attendance data."""
         # Initialize a dictionary to count attendance statuses by period
-        periods = {f"Period {i}": {'Present': 0, 'Absent': 0, 'Late': 0} for i in range(1, 9)}
+        periods = {f"Period {i}": {'Present': 0, 'Absent': 0} for i in range(1, 9)}  # Only Present and Absent
 
         # Populate the period data
         for row in self.sample_data:
             period = row[6].strip()  # Period is the 7th element in the row
-            status = row[7].strip().capitalize()  # Status: Present, Absent, Late
+            status = row[7].strip().capitalize()  # Status: Present, Absent
             
             # Debugging: Print the status and period being counted
             print(f"Counting {status} for {period}")
@@ -118,18 +118,15 @@ class Developer:
         labels = list(periods.keys())
         present_count = [periods[period]['Present'] for period in labels]
         absent_count = [periods[period]['Absent'] for period in labels]
-        late_count = [periods[period]['Late'] for period in labels]
 
         # Debugging: Print counts for each period
         print("Present counts:", present_count)
         print("Absent counts:", absent_count)
-        print("Late counts:", late_count)
 
         fig, ax = plt.subplots(figsize=(8, 6))
 
         ax.bar(labels, present_count, label='Present', color='#55efc4')
         ax.bar(labels, absent_count, label='Absent', color='#ff7675', bottom=present_count)
-        ax.bar(labels, late_count, label='Late', color='#ffeaa7', bottom=[i + j for i, j in zip(present_count, absent_count)])
 
         ax.set_ylabel('Number of Students')
         ax.set_title('Attendance by Period')

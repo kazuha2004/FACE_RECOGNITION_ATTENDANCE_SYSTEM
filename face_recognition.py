@@ -42,7 +42,7 @@ class Face_Recognition:
 
     # ======================== ATTENDANCE MARKING FUNCTION ============================
     def mark_attendance(self, student_id, roll, name, dep):
-        today_date = datetime.now().strftime("%d-%m-%Y")  # Use hyphens for date
+        today_date = datetime.now().strftime("%d-%m-%Y")
         marked_today = False
 
         # Path for attendance data
@@ -67,7 +67,6 @@ class Face_Recognition:
                         break
 
                 if marked_today:
-                    print(f"Attendance for ID {student_id} ({name}) is already marked for today.")
                     return False
 
                 now = datetime.now()
@@ -75,34 +74,33 @@ class Face_Recognition:
 
                 # Define lecture periods from timetable
                 lecture_periods = {
-                    1: {"start": now.replace(hour=9, minute=5), "late": now.replace(hour=9, minute=20)},
-                    2: {"start": now.replace(hour=9, minute=55), "late": now.replace(hour=10, minute=10)},
-                    3: {"start": now.replace(hour=10, minute=55), "late": now.replace(hour=11, minute=10)},
-                    4: {"start": now.replace(hour=11, minute=45), "late": now.replace(hour=12, minute=0)},
-                    5: {"start": now.replace(hour=13, minute=25), "late": now.replace(hour=13, minute=40)},
-                    6: {"start": now.replace(hour=14, minute=15), "late": now.replace(hour=14, minute=30)},
-                    7: {"start": now.replace(hour=15, minute=15), "late": now.replace(hour=15, minute=30)},
-                    8: {"start": now.replace(hour=16, minute=5), "late": now.replace(hour=16, minute=20)},
+                    1: {"start": now.replace(hour=9, minute=5), "end": now.replace(hour=9, minute=20)},
+                    2: {"start": now.replace(hour=9, minute=55), "end": now.replace(hour=10, minute=10)},
+                    3: {"start": now.replace(hour=10, minute=55), "end": now.replace(hour=11, minute=10)},
+                    4: {"start": now.replace(hour=11, minute=45), "end": now.replace(hour=12, minute=0)},
+                    5: {"start": now.replace(hour=13, minute=25), "end": now.replace(hour=13, minute=40)},
+                    6: {"start": now.replace(hour=14, minute=15), "end": now.replace(hour=14, minute=30)},
+                    7: {"start": now.replace(hour=15, minute=15), "end": now.replace(hour=15, minute=30)},
+                    8: {"start": now.replace(hour=16, minute=5), "end": now.replace(hour=16, minute=20)},
                 }
 
-                attendance_status = "Absent"
+                attendance_status = "Absent"  # Default to Absent if the time doesn't match a period
                 current_period = None
 
+                # Check if the current time falls within any lecture period
                 for period, times in lecture_periods.items():
-                    if times["start"] <= now < times["late"]:
+                    if times["start"] <= now < times["end"]:
                         attendance_status = "Present"
                         current_period = period
-                    elif times["late"] <= now < times["late"] + timedelta(minutes=35):
-                        attendance_status = "Late"
-                        current_period = period
 
+                # Write attendance status to the CSV file
                 if current_period:
                     f.write(f"{student_id},{roll},{name},{dep},{dtString},{today_date},Period {current_period},{attendance_status}\n")
-                    print(f"Attendance marked as {attendance_status} for ID {student_id} ({name}) at {dtString} for Period {current_period}")
                     return True
                 else:
-                    print("No active period found for marking attendance.")
-                    return False
+                    # Mark the student as Absent if outside any period
+                    f.write(f"{student_id},{roll},{name},{dep},{dtString},{today_date},--,{attendance_status}\n")
+                    return True
 
         except Exception as e:
             print(f"Error handling attendance file: {str(e)}")
@@ -111,12 +109,24 @@ class Face_Recognition:
     def start_recognition(self):
         print("Face Recognition Process Started")
         recognized_ids = set()
+        students_in_class = set()  # Track all students who are in the class
 
         try:
             faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
             clf = cv2.face.LBPHFaceRecognizer_create()
             clf.read("classifier.xml")
             video_cap = cv2.VideoCapture(0)
+
+            # Fetch all students from the database
+            conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
+            cursor = conn.cursor()
+            cursor.execute("SELECT Student_id, Name, Roll, Dep FROM student")
+            all_students = cursor.fetchall()
+            conn.close()
+
+            # Store all student IDs in a set for later comparison
+            for student in all_students:
+                students_in_class.add(student[0])
 
             while True:
                 ret, img = video_cap.read()
@@ -146,8 +156,6 @@ class Face_Recognition:
                                 attendance_marked = self.mark_attendance(student_id, roll, name, dep)
                                 if attendance_marked:
                                     recognized_ids.add(student_id)
-                                else:
-                                    cv2.putText(img, "Attendance Already Marked", (x, y + h + 25), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 0, 0), 2)
 
                         conn.close()
 
@@ -158,6 +166,21 @@ class Face_Recognition:
 
                 if cv2.waitKey(1) == 13:  # Press 'Enter' to exit
                     break
+
+            # After face recognition ends, mark absent students
+            absent_students = students_in_class - recognized_ids
+            for student_id in absent_students:
+                conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
+                cursor = conn.cursor()
+
+                cursor.execute(f"SELECT Name, Roll, Dep FROM student WHERE Student_id={student_id}")
+                result = cursor.fetchone()
+
+                if result:
+                    name, roll, dep = result
+                    self.mark_attendance(student_id, roll, name, dep)  # Mark absent for the student
+
+                conn.close()
 
             video_cap.release()
             cv2.destroyAllWindows()
