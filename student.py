@@ -8,6 +8,7 @@ from tkinter import messagebox
 import mysql.connector
 import subprocess
 import os
+import re
 
 
 
@@ -141,15 +142,19 @@ class Student:
             studentID_label = Label(class_student_frame, text="Student ID:", font=("Helvetica", 12, "bold"))
             studentID_label.grid(row=0, column=0, padx=(10),pady=(5),sticky=W)
 
-            studentID_entry=ttk.Entry(class_student_frame,textvariable=self.var_std_id,width=20,font=("Helvetica", 12, "bold"))
-            studentID_entry.grid(row=0,column=1,padx=10,pady=(5),sticky=W)
+            # Adding validation to allow only digits in the Student ID entry
+            validate_digit_cmd = (self.root.register(self.validate_ID_input), '%P')
+            studentID_entry = ttk.Entry(class_student_frame, textvariable=self.var_std_id, width=20,font=("Helvetica", 12, "bold"), validate="key",validatecommand=validate_digit_cmd)
+            studentID_entry.grid(row=0, column=1, padx=10, pady=(5), sticky=W)
 
             #Student name
             studentname_label = Label(class_student_frame, text="Student Name:", font=("Helvetica", 12, "bold"))
             studentname_label.grid(row=0, column=2, padx=(10),pady=(5), sticky=W)
 
-            studentname_entry=ttk.Entry(class_student_frame,textvariable=self.var_std_name,width=20,font=("Helvetica", 12, "bold"))
-            studentname_entry.grid(row=0,column=3,padx=10,pady=(5),sticky=W)
+            # Adding validation to allow only alphabets and spaces
+            validate_name_cmd = (self.root.register(self.validate_name_input), '%P')
+            studentname_entry = ttk.Entry(class_student_frame, textvariable=self.var_std_name, width=20,font=("Helvetica", 12, "bold"), validate="key",validatecommand=validate_name_cmd)
+            studentname_entry.grid(row=0, column=3, padx=10, pady=(5), sticky=W)
 
             #Class division
             class_div_label = Label(class_student_frame, text="Class Division:", font=("Helvetica", 12, "bold"))
@@ -164,7 +169,8 @@ class Student:
             roll_no_label = Label(class_student_frame, text="Roll NO:", font=("Helvetica", 12, "bold"))
             roll_no_label.grid(row=1, column=2, padx=(10),pady=(5), sticky=W)
 
-            roll_no_entry=ttk.Entry(class_student_frame,textvariable=self.var_roll,width=20,font=("Helvetica", 12, "bold"))
+            validate_digit_cmd = (self.root.register(self.validate_ID_input), '%P')
+            roll_no_entry=ttk.Entry(class_student_frame,textvariable=self.var_roll,width=20,font=("Helvetica", 12, "bold"), validate="key",validatecommand=validate_digit_cmd)
             roll_no_entry.grid(row=1,column=3,padx=10,pady=(5),sticky=W)
 
             #Gender
@@ -180,22 +186,41 @@ class Student:
             dob_label = Label(class_student_frame, text="DOB:", font=("Helvetica", 12, "bold"))
             dob_label.grid(row=2, column=2, padx=(10),pady=(5), sticky=W)
 
-            dob_entry=ttk.Entry(class_student_frame,textvariable=self.var_dob,width=20,font=("Helvetica", 12, "bold"))
-            dob_entry.grid(row=2,column=3,padx=10,pady=(5),sticky=W)
+            # Adding validation to ensure the Date of Birth follows the format DD/MM/YYYY or YYYY-MM-DD
+            validate_date_cmd = (self.root.register(self.validate_date_input), '%P')
 
+            # Create the entry widget with the validation command
+
+            dob_entry = ttk.Entry(class_student_frame,
+                                  textvariable=self.var_dob,
+                                  width=20,
+                                  font=("Helvetica", 12, "bold"),
+                                  validate="key",
+                                  validatecommand=validate_date_cmd)
+
+            # Place the entry widget in the layout
+            dob_entry.grid(row=2, column=3, padx=10, pady=(5), sticky=W)
             #Email
             email_label = Label(class_student_frame, text="Email:", font=("Helvetica", 12, "bold"))
             email_label.grid(row=3, column=0, padx=(10),pady=(5), sticky=W)
 
-            email_entry=ttk.Entry(class_student_frame,textvariable=self.var_email,width=20,font=("Helvetica", 12, "bold"))
-            email_entry.grid(row=3,column=1,padx=10,pady=(5),sticky=W)
+            # Register the validation command for the email field
+            validate_email_cmd = (self.root.register(self.validate_email_input), '%P')
+
+            # Create the email entry widget with the validation command
+            email_entry = ttk.Entry(class_student_frame,textvariable=self.var_email,width=20,font=("Helvetica", 12, "bold"),validate="key",validatecommand=validate_email_cmd)
+
+            # Place the email entry widget in the layout
+            email_entry.grid(row=3, column=1, padx=10, pady=(5), sticky=W)
 
             #Phone no
             phone_no_label = Label(class_student_frame, text="Phone NO:", font=("Helvetica", 12, "bold"))
-            phone_no_label.grid(row=3, column=2, padx=(10),pady=(5), sticky=W)
+            phone_no_label.grid(row=3, column=2, padx=(10), pady=(5), sticky=W)
 
-            phone_no_entry=ttk.Entry(class_student_frame,textvariable=self.var_phone,width=20,font=("Helvetica", 12, "bold"))
-            phone_no_entry.grid(row=3,column=3,padx=10,pady=(5),sticky=W)
+            # Adding validation to allow only numbers
+            validate_phone_cmd = (self.root.register(self.validate_phone_input), '%P')
+            phone_no_entry = ttk.Entry(class_student_frame, textvariable=self.var_phone, width=20,font=("Helvetica", 12, "bold"), validate="key",validatecommand=validate_phone_cmd)
+            phone_no_entry.grid(row=3, column=3, padx=10, pady=(5), sticky=W)
 
             #Address 
             address_label = Label(class_student_frame, text="Address:", font=("Helvetica", 12, "bold"))
@@ -208,9 +233,12 @@ class Student:
             teacher_label = Label(class_student_frame, text="Teacher Name:", font=("Helvetica", 12, "bold"))
             teacher_label.grid(row=4, column=2, padx=(10),pady=(5), sticky=W)
 
-            teacher_entry=ttk.Entry(class_student_frame,textvariable=self.var_teacher,width=20,font=("Helvetica", 12, "bold"))
+            validate_name_cmd = (self.root.register(self.validate_name_input), '%P')
+            teacher_entry=ttk.Entry(class_student_frame,textvariable=self.var_teacher,width=20,font=("Helvetica", 12, "bold"),validate="key",validatecommand=validate_name_cmd)
             teacher_entry.grid(row=4,column=3,padx=10,pady=(5),sticky=W)
 
+
+#################################################################################################################################################
             # radio button
             Radiobtn1 = ttk.Radiobutton(class_student_frame, text="Take Photo Sample",variable=self.var_radio1, value="Yes")
             Radiobtn1.grid(row=6, column=0)
@@ -341,7 +369,7 @@ class Student:
                   messagebox.showerror("Error", "All fields are required", parent=self.root)
             else:
                   try:
-                        conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
+                        conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@", database="face_recognition")
                         my_cursor = conn.cursor()
                         my_cursor.execute("insert into student values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                                           (self.var_dep.get(),
@@ -370,7 +398,7 @@ class Student:
 
       #======================Fetch data =============================
       def fetch_data(self):
-            conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
+            conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@", database="face_recognition")
             my_cursor = conn.cursor()
             my_cursor.execute("select * from student")
             data=my_cursor.fetchall()
@@ -414,7 +442,7 @@ class Student:
                         try:
                               update = messagebox.askyesno("Update", "Do you want to update this student's details?", parent=self.root)
                               if update:
-                                    conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
+                                    conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@", database="face_recognition")
                                     my_cursor = conn.cursor()
                                     my_cursor.execute("UPDATE student SET Dep=%s, course=%s, Year=%s, Semester=%s, Name=%s, Division=%s, Roll=%s, Gender=%s, Dob=%s, Email=%s, Phone=%s, Address=%s, Teacher=%s, PhotoSample=%s WHERE Student_id=%s",
 
@@ -454,7 +482,7 @@ class Student:
                   try:
                         delete=messagebox.askyesno("Student Delete Page","Do you want to delete this student",parent=self.root)
                         if delete>0:
-                              conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
+                              conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@", database="face_recognition")
                               my_cursor = conn.cursor()
                               sql="delete from student where Student_id=%s"
                               val=(self.var_std_id.get(),)
@@ -495,7 +523,7 @@ class Student:
                   messagebox.showerror("Error", "All fields are required", parent=self.root)
             else:
                   try:
-                              conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
+                              conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@", database="face_recognition")
                               my_cursor = conn.cursor()
                   
                               # Ensure the correct student ID is used for saving images
@@ -582,14 +610,63 @@ class Student:
                   # Close the current window (student.py)
                   self.root.destroy()
             except Exception as e:
-                  print(f"Error when trying to close the window: {e}")       
-
-
-                        
+                  print(f"Error when trying to close the window: {e}")
 
 
 
+   # FOR CHECKING CONDTIONS THAT SHOULD BE FOLLOWED BY THE USER WHILE INSERTING DATA
 
+      # PHONE NUMBER LENGTH SHOULD BE 11 AND SHOULD CONTAINS ONLY ALPHABETS :::>
+
+      def validate_phone_input(self, input_text):
+            if input_text == "":  #  FOR  Allowing us to clear the text (Backspace)
+                  return True
+            return input_text.isdigit() and   len(input_text) <= 10  # Allow only digits or empty field
+
+
+
+      #NAME AND TEACHERS NAME SHOULD CONSIST OF ONLY ALPHABETS:::>
+      def validate_name_input(self, input_text):
+            if input_text == "":  #  FOR  Allowing us to clear the text (Backspace)
+              return True
+          # Allow only alphabetic characters and spaces between them(NOT STARTING WITH SPACE AND NOT ENDING WITH SPACE)
+            if input_text.isalpha() or input_text.replace(" ", "").isalpha():
+                  return True
+            return False
+
+      # ID SHOULD ONLY BE DIGIT :::>
+      def validate_ID_input(self, input_text):
+            """
+            Allows only numeric digits for the student ID.
+            """
+            if input_text == "":  # Allow clearing the text (Backspace/Delete)
+                  return True
+
+            # Allow only digits
+            if input_text.isdigit():
+                  return True
+            return False
+
+      # APPLYING CONDITION TO THE FORMAT OF DATE:::>
+
+      def validate_date_input(self, input_text):
+            """
+            Validates the input for date of birth. It allows numbers and separators (e.g., '/', '-').
+            """
+            # Allow numbers and the separators only (/ or -)
+            if input_text == "":  # Allow clearing the text
+                  return True
+
+            #  match the date format e.g., DD/MM/YYYY or YYYY-MM-DD
+            # Allow two digits for day, month, and four digits for year, separated by / or -
+            if re.match(r"^\d{0,2}([/-]?\d{0,2})?([/-]?\d{0,4})?$", input_text):
+                  return True
+
+            return False
+
+
+      #EMAIL::>
+      
 #==========>HAAR CASCADE ALGO GIVES EYE DETECTION AND FACE DETECTION
 
 

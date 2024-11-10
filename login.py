@@ -77,7 +77,7 @@ class LoginSystem:
             connection = mysql.connector.connect(
                 host="localhost",
                 user="root",
-                password="0607",  # Change to your MySQL password
+                password="Sahil30@",  # Change to your MySQL password
                 database="register"
             )
             cursor = connection.cursor()
@@ -171,7 +171,7 @@ class Register:
             connection = mysql.connector.connect(
                 host="localhost",
                 user="root",
-                password="0607",  # Change to your MySQL password
+                password="Sahil30@",  # Change to your MySQL password
                 database="register"
             )
             cursor = connection.cursor()
@@ -306,7 +306,7 @@ class ForgotPassword:
             connection = mysql.connector.connect(
                 host="localhost",
                 user="root",
-                password="0607",  # Change to your MySQL password
+                password="Sahil30@",  # Change to your MySQL password
                 database="register"
             )
             cursor = connection.cursor()

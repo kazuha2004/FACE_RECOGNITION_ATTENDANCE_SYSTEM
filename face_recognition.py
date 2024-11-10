@@ -118,7 +118,7 @@ class Face_Recognition:
             video_cap = cv2.VideoCapture(0)
 
             # Fetch all students from the database
-            conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
+            conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@", database="face_recognition")
             cursor = conn.cursor()
             cursor.execute("SELECT Student_id, Name, Roll, Dep FROM student")
             all_students = cursor.fetchall()
@@ -138,8 +138,8 @@ class Face_Recognition:
                     student_id, predict = clf.predict(gray[y:y + h, x:x + w])
                     confidence = int((100 * (1 - predict / 300)))
 
-                    if confidence > 70:  # Recognized face
-                        conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
+                    if confidence > 75 : # Recognized face
+                        conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@", database="face_recognition")
                         cursor = conn.cursor()
 
                         cursor.execute(f"SELECT Name, Roll, Dep FROM student WHERE Student_id={student_id}")
@@ -170,7 +170,7 @@ class Face_Recognition:
             # After face recognition ends, mark absent students
             absent_students = students_in_class - recognized_ids
             for student_id in absent_students:
-                conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
+                conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@", database="face_recognition")
                 cursor = conn.cursor()
 
                 cursor.execute(f"SELECT Name, Roll, Dep FROM student WHERE Student_id={student_id}")
