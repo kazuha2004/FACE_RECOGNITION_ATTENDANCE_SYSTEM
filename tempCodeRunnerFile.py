@@ -1,1 +1,1 @@
-how accurate is the face recognition
+self.announce_opening("Student Details Module")
