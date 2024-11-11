@@ -204,13 +204,10 @@ class Student:
             email_label = Label(class_student_frame, text="Email:", font=("Helvetica", 12, "bold"))
             email_label.grid(row=3, column=0, padx=(10),pady=(5), sticky=W)
 
-            # Register the validation command for the email field
-            validate_email_cmd = (self.root.register(self.validate_email_input), '%P')
 
-            # Create the email entry widget with the validation command
-            email_entry = ttk.Entry(class_student_frame,textvariable=self.var_email,width=20,font=("Helvetica", 12, "bold"),validate="key",validatecommand=validate_email_cmd)
 
-            # Place the email entry widget in the layout
+            email_entry = ttk.Entry(class_student_frame,textvariable=self.var_email,width=20,font=("Helvetica", 12, "bold"))
+
             email_entry.grid(row=3, column=1, padx=10, pady=(5), sticky=W)
 
             #Phone no
@@ -666,6 +663,7 @@ class Student:
 
 
       #EMAIL::>
+
       
 #==========>HAAR CASCADE ALGO GIVES EYE DETECTION AND FACE DETECTION
 
