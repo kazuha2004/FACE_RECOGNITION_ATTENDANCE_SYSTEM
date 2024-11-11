@@ -44,7 +44,7 @@ class ChatBot:
         # User Input Field
         self.entry = StringVar()
         self.entry_field = ttk.Entry(btn_frame, textvariable=self.entry, width=40, 
-                                     font=('times new roman', 16, 'bold'), foreground='white', background='#23272a')
+                                     font=('times new roman', 16, 'bold'), foreground='black', background='#23272a')
         self.entry_field.grid(row=0, column=1, padx=5, sticky=W)
 
         # Send Button
@@ -105,13 +105,36 @@ class ChatBot:
     # Function to generate bot responses based on user input
     def generate_bot_response(self, user_input):
         responses = {
-            'hello': "Hi! How can I assist you today?",
-            'hi': "Hello! What would you like to talk about?",
-            'how are you': "I'm just a bot, but I'm doing great! How about you?",
-            'who created you': "I was created by Mr. Sandeep Vishwakarma.",
-            'bye': "Goodbye! Have a great day!",
-            'thanks': "You're welcome! Let me know if you need anything else."
-        }
+    'hello': "Hi! How can I assist you with the attendance system today?",
+    'hi': "Hello! Need help with the attendance system?",
+    'how are you': "I'm here and ready to help with your attendance queries!",
+    'who created you': "I was developed as part of a project to enhance attendance management using face recognition technology.",
+    'bye': "Goodbye! Have a great day!",
+    'thanks': "You're welcome! Let me know if you need more help.",
+    
+    # Attendance System Specific Questions
+    'how does this attendance system work': "The system captures your face image, identifies you using face recognition technology, and marks your attendance automatically.",
+    'what is face recognition attendance system': "It’s an automated system that uses face recognition to identify users and record their attendance, ensuring an efficient and secure process.",
+    'can this system mark my attendance automatically': "Yes! Once the system recognizes your face, it marks your attendance automatically and records the time.",
+    'is my data safe with this attendance system': "Yes, your data is stored securely and is only used for attendance purposes. We ensure compliance with privacy guidelines.",
+    'how accurate is the face recognition': "The system is designed to be highly accurate, but factors like lighting and camera quality can affect the results.",
+    'how is attendance recorded': "Once your face is recognized, your attendance is marked along with the date and time in the system's database.",
+    'can this system detect multiple people at once': "Yes, it can handle multiple faces, allowing the system to mark attendance for several people at once if they are recognized.",
+    'what if my face is not recognized': "If your face isn’t recognized, ensure you are facing the camera properly. You may also need to register or re-register in the system.",
+    'can i view my attendance history': "Yes, you can request your attendance history if this feature is enabled by your organization.",
+    'how can i register my face': "To register, look at the camera while the system records your facial features for future recognition.",
+    'what happens if someone else tries to check in for me': "The system is designed to identify unique facial features, so only you can check in with your own face.",
+    'can this be used for remote attendance': "If the system is set up for remote recognition, you can mark your attendance from other locations.",
+    'what if i am wearing glasses or a mask': "Glasses usually won’t be an issue, but masks can affect recognition accuracy. It's best to ensure your face is fully visible for reliable attendance marking.",
+    'what are the benefits of face recognition attendance': "It offers a fast, hands-free way to mark attendance, reduces the chance of proxy attendance, and keeps attendance data secure.",
+    
+    # General Questions
+    'what technology is used in this system': "This system uses Python, OpenCV for face recognition, and a secure database to store attendance records.",
+    'how can you help me': "I can answer questions about the attendance system, help with troubleshooting, and explain features.",
+    'tell me a joke': "Sure! Why did the computer take a nap? It had a hard drive!",
+    'who can access my attendance data': "Only authorized personnel can access attendance records, ensuring your privacy and data security."
+}
+
 
         # Fallback response for unrecognized input
         bot_response = responses.get(user_input, self.default_response(user_input))
