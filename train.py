@@ -6,12 +6,17 @@ import mysql.connector
 import os
 import numpy as np
 import cv2
+import pyttsx3
+import threading
 
 class Train:
     def __init__(self, root):
         self.root = root
         self.root.geometry("1500x790+0+0")
         self.root.title("Face Recognition System")
+
+        self.speech_engine = pyttsx3.init()
+        self.speech_engine.setProperty('rate', 150)
 
         # Set a black background for the entire window
         self.root.configure(bg="black")
@@ -48,6 +53,13 @@ class Train:
         f_lbl_bottom.place(x=25, y=470, width=1450, height=300)
 
     # Function to train classifier
+    def announce_in_thread(self, message):
+            threading.Thread(target=self.announce, args=(message,)).start()
+
+    def announce(self, message):
+            self.speech_engine.say(message)
+            self.speech_engine.runAndWait()
+
     def train_classifier(self):
         data_dir = "data"
         path = [os.path.join(data_dir, file) for file in os.listdir(data_dir)]
@@ -71,6 +83,7 @@ class Train:
         clf.train(faces, ids)
         clf.write("classifier.xml")
         cv2.destroyAllWindows()
+        self.announce_in_thread("Training dataset completed")
         messagebox.showinfo("RESULT", "Training dataset completed")
     
     def go_back(self):

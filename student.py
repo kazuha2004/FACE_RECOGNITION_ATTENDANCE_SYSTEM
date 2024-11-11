@@ -10,6 +10,7 @@ import subprocess
 import os
 import re
 import threading
+import queue
 import pyttsx3
 
 
@@ -20,7 +21,16 @@ class Student:
             self.root.title("Face Recognition System")
 
             self.speech_engine = pyttsx3.init()
-            self.speech_engine.setProperty('rate', 150)
+            self.speech_queue = queue.Queue()
+            self.speech_thread = threading.Thread(target=self.process_queue)
+            self.speech_thread.daemon = True  # Daemon thread exits when main program exits
+            self.speech_thread.start()
+            self.speech_engine.setProperty('rate', 180)
+      
+      
+
+            
+
 
             
       
@@ -375,11 +385,12 @@ class Student:
 
       def add_data(self):
             if self.var_dep.get() == "Select Department" or self.var_std_name.get() == "" or self.var_std_id.get() == "":
-                  messagebox.showerror("Error", "All fields are required", parent=self.root)
                   self.announce_in_thread("Error. All fields are required.")
+                  messagebox.showerror("Error", "All fields are required", parent=self.root)
+                  
             else:
                   try:
-                        conn = mysql.connector.connect(host="localhost", username="root", password="8055", database="face_recognition")
+                        conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
                         my_cursor = conn.cursor()
                         my_cursor.execute("insert into student values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                                           (self.var_dep.get(),
@@ -411,7 +422,7 @@ class Student:
 
       #======================Fetch data =============================
       def fetch_data(self):
-            conn = mysql.connector.connect(host="localhost", username="root", password="8055", database="face_recognition")
+            conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
             my_cursor = conn.cursor()
             my_cursor.execute("select * from student")
             data=my_cursor.fetchall()
@@ -461,10 +472,11 @@ class Student:
                         messagebox.showerror("Error", "All fields are required", parent=self.root)
                         
                   else:
-                        try:
+                        try:  
+                              self.announce_in_thread("Do you want to update this student's details?")
                               update = messagebox.askyesno("Update", "Do you want to update this student's details?", parent=self.root)
                               if update:
-                                    conn = mysql.connector.connect(host="localhost", username="root", password="8055", database="face_recognition")
+                                    conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
                                     my_cursor = conn.cursor()
                                     my_cursor.execute("UPDATE student SET Dep=%s, course=%s, Year=%s, Semester=%s, Name=%s, Division=%s, Roll=%s, Gender=%s, Dob=%s, Email=%s, Phone=%s, Address=%s, Teacher=%s, PhotoSample=%s WHERE Student_id=%s",
 
@@ -489,7 +501,7 @@ class Student:
                               else:
                                     if not update:
                                           return
-                              self.announce_in_thread("Error. All fields are required.")
+                              self.announce_in_thread("Student details updated successfully")
                               messagebox.showinfo("Success", "Student details updated successfully", parent=self.root)
                               self.fetch_data()
                               conn.commit()
@@ -508,13 +520,14 @@ class Student:
 
       def delete_data(self):
             if self.var_std_id.get()=="":
-                  self.announce_in_thread("Error","Student id must be required")
+                  self.announce_in_thread("Error. Student id must be required")
                   messagebox.showerror("Error","Student id must be required" ,parent=self.root)
             else:
                   try:
+                        self.announce_in_thread("Do you want to delete this student")
                         delete=messagebox.askyesno("Student Delete Page","Do you want to delete this student",parent=self.root)
                         if delete>0:
-                              conn = mysql.connector.connect(host="localhost", username="root", password="8055", database="face_recognition")
+                              conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
                               my_cursor = conn.cursor()
                               sql="delete from student where Student_id=%s"
                               val=(self.var_std_id.get(),)
@@ -525,7 +538,7 @@ class Student:
                         conn.commit()
                         self.fetch_data()
                         conn.close()
-                        self.announce_in_thread("Delete", "Successfully delete student details")
+                        self.announce_in_thread("Successfully delete student details")
                         messagebox.showinfo("Delete", "Successfully delete student details", parent=self.root)
                   except Exception as e:
                               self.announce_in_thread(f"Error occurred: {str(e)}")
@@ -565,7 +578,7 @@ class Student:
                   messagebox.showerror("Error", "All fields are required", parent=self.root)
             else:
                   try:
-                              conn = mysql.connector.connect(host="localhost", username="root", password="8055", database="face_recognition")
+                              conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
                               my_cursor = conn.cursor()
                   
                               # Ensure the correct student ID is used for saving images
@@ -575,6 +588,7 @@ class Student:
                               my_cursor.execute("SELECT * FROM student WHERE Student_id=%s", (student_id,))
                               result = my_cursor.fetchone()
                               if result is None:
+                                    self.announce_in_thread("Student ID not found in the database.")
                                     messagebox.showerror("Error", "Student ID not found in the database", parent=self.root)
                                     return
 
@@ -640,7 +654,7 @@ class Student:
 
                               cap.release()
                               cv2.destroyAllWindows()
-                              self.announce_in_thread("Result", "100 samples captured successfully!")
+                              self.announce_in_thread("100 samples captured successfully!")
                               messagebox.showinfo("Result", "100 samples captured successfully!", parent=self.root)
 
                   except Exception as e:
@@ -707,6 +721,16 @@ class Student:
                   return True
 
             return False
+      
+      def process_queue(self):
+            while True:
+                  message = self.speech_queue.get()
+                  if message is None:  # Exit the thread if None is retrieved
+                        break
+                  # Announce the message using the announce function
+                  self.announce(message)
+                  # Mark the queue task as done
+                  self.speech_queue.task_done()
 
 
       #EMAIL::>

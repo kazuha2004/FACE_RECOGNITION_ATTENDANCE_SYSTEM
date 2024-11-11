@@ -79,7 +79,7 @@ class Face_Recognition_System:
         b3 = Button(self.root, image=self.photoimg5, cursor="hand2", command=self.face_recognition_data)
         b3.place(x=500, y=200, width=220, height=220)
 
-        b3_1 = Button(self.root, text="Face Detector", command=self.face_recognition_data, cursor="hand2", font=("Helvetica", 15, "bold"), bg="black", fg="white")
+        b3_1 = Button(self.root, text="Face Recognition", command=self.face_recognition_data, cursor="hand2", font=("Helvetica", 15, "bold"), bg="black", fg="white")
         b3_1.place(x=500, y=400, width=220, height=40)
 
         # Attendance button
