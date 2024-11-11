@@ -105,34 +105,63 @@ class ChatBot:
     # Function to generate bot responses based on user input
     def generate_bot_response(self, user_input):
         responses = {
-    'hello': "Hi! How can I assist you with the attendance system today?",
-    'hi': "Hello! Need help with the attendance system?",
-    'how are you': "I'm here and ready to help with your attendance queries!",
-    'who created you': "I was developed as part of a project to enhance attendance management using face recognition technology.",
-    'bye': "Goodbye! Have a great day!",
-    'thanks': "You're welcome! Let me know if you need more help.",
+          'hello': "Hi! How can I assist you with the attendance system today?",
+          'hi': "Hello! Need help with the attendance system?",
+          'how are you': "I'm here and ready to help with your attendance queries!",
+          'who created you': "I was developed as part of a project to enhance attendance management using face recognition technology.",
+          'bye': "Goodbye! Have a great day!",
+          'thanks': "You're welcome! Let me know if you need more help.",
     
-    # Attendance System Specific Questions
-    'how does this attendance system work': "The system captures your face image, identifies you using face recognition technology, and marks your attendance automatically.",
-    'what is face recognition attendance system': "It’s an automated system that uses face recognition to identify users and record their attendance, ensuring an efficient and secure process.",
-    'can this system mark my attendance automatically': "Yes! Once the system recognizes your face, it marks your attendance automatically and records the time.",
-    'is my data safe with this attendance system': "Yes, your data is stored securely and is only used for attendance purposes. We ensure compliance with privacy guidelines.",
-    'how accurate is the face recognition': "The system is designed to be highly accurate, but factors like lighting and camera quality can affect the results.",
-    'how is attendance recorded': "Once your face is recognized, your attendance is marked along with the date and time in the system's database.",
-    'can this system detect multiple people at once': "Yes, it can handle multiple faces, allowing the system to mark attendance for several people at once if they are recognized.",
-    'what if my face is not recognized': "If your face isn’t recognized, ensure you are facing the camera properly. You may also need to register or re-register in the system.",
-    'can i view my attendance history': "Yes, you can request your attendance history if this feature is enabled by your organization.",
-    'how can i register my face': "To register, look at the camera while the system records your facial features for future recognition.",
-    'what happens if someone else tries to check in for me': "The system is designed to identify unique facial features, so only you can check in with your own face.",
-    'can this be used for remote attendance': "If the system is set up for remote recognition, you can mark your attendance from other locations.",
-    'what if i am wearing glasses or a mask': "Glasses usually won’t be an issue, but masks can affect recognition accuracy. It's best to ensure your face is fully visible for reliable attendance marking.",
-    'what are the benefits of face recognition attendance': "It offers a fast, hands-free way to mark attendance, reduces the chance of proxy attendance, and keeps attendance data secure.",
+          # Attendance System Specific Questions
+          'how does this attendance system work': "The system captures your face image, identifies you using face recognition technology, and marks your attendance automatically.",
+          'what is face recognition attendance system': "It’s an automated system that uses face recognition to identify users and record their attendance, ensuring an efficient and secure process.",
+          'can this system mark my attendance automatically': "Yes! Once the system recognizes your face, it marks your attendance automatically and records the time.",
+          'is my data safe with this attendance system': "Yes, your data is stored securely and is only used for attendance purposes. We ensure compliance with privacy guidelines.",
+          'how accurate is the face recognition': "The system is designed to be highly accurate, but factors like lighting and camera quality can affect the results.",
+          'how is attendance recorded': "Once your face is recognized, your attendance is marked along with the date and time in the system's database.",
+          'can this system detect multiple people at once': "Yes, it can handle multiple faces, allowing the system to mark attendance for several people at once if they are recognized.",
+          'what if my face is not recognized': "If your face isn’t recognized, ensure you are facing the camera properly. You may also need to register or re-register in the system.",
+          'can i view my attendance history': "Yes, you can request your attendance history if this feature is enabled by your organization.",
+          'how can i register my face': "To register, look at the camera while the system records your facial features for future recognition.",
+          'what happens if someone else tries to check in for me': "The system is designed to identify unique facial features, so only you can check in with your own face.",
+          'can this be used for remote attendance': "If the system is set up for remote recognition, you can mark your attendance from other locations.",
+          'what if i am wearing glasses or a mask': "Glasses usually won’t be an issue, but masks can affect recognition accuracy. It's best to ensure your face is fully visible for reliable attendance marking.",
+          'what are the benefits of face recognition attendance': "It offers a fast, hands-free way to mark attendance, reduces the chance of proxy attendance, and keeps attendance data secure.",
     
-    # General Questions
-    'what technology is used in this system': "This system uses Python, OpenCV for face recognition, and a secure database to store attendance records.",
-    'how can you help me': "I can answer questions about the attendance system, help with troubleshooting, and explain features.",
-    'tell me a joke': "Sure! Why did the computer take a nap? It had a hard drive!",
-    'who can access my attendance data': "Only authorized personnel can access attendance records, ensuring your privacy and data security."
+          # General Questions
+          'what technology is used in this system': "This system uses Python, OpenCV for face recognition, and a secure database to store attendance records.",
+          'how can you help me': "I can answer questions about the attendance system, help with troubleshooting, and explain features.",
+          'tell me a joke': "Sure! Why did the computer take a nap? It had a hard drive!",
+          'who can access my attendance data': "Only authorized personnel can access attendance records, ensuring your privacy and data security.",
+
+              # Detailed Attendance System Questions
+          'how is attendance recorded in this system': "Once the system recognizes your face, it marks your attendance along with the date and time, saving it securely in the attendance database.",
+          'how accurate is the face recognition system': "The system is highly accurate under good lighting and with clear images, but factors like image quality, facial obstructions, or low light can impact accuracy.",
+          'what technology does this system use': "This system uses Python with OpenCV for face detection, and a database for securely storing attendance records.",
+          'is my attendance recorded in real-time': "Yes, once your face is recognized, your attendance is marked instantly in real-time and saved with a timestamp.",
+          'can this system mark attendance for multiple people at once': "Yes, it can recognize and record attendance for multiple faces simultaneously, allowing for efficient group check-ins.",
+    
+          # Data Privacy and Security
+          'is my data safe with this attendance system': "Yes, your data is stored securely and is used solely for attendance tracking. The system complies with privacy and data security protocols.",
+          'who can access my attendance data': "Only authorized personnel can access attendance records to ensure your privacy and data security.",
+          'how is my data stored': "Your attendance data is stored in a secure, encrypted database, and facial data is used only temporarily for real-time recognition.",
+    
+    # Registration and User Queries
+          'how do i register my face': "To register, simply look at the camera as the system captures your facial features and stores them securely for future recognition.",
+          'can i view my attendance history': "Yes, if enabled, you can request your attendance history through authorized access or a specific portal provided by your organization.",
+          'what if my face is not recognized': "Ensure that you are facing the camera directly, with good lighting. If issues persist, re-registration may be required.",
+          'can this system work if i have a new hairstyle or wear glasses': "The system is designed to recognize you despite minor changes, but drastic changes might require re-registration.",
+          'does this system work if i am wearing a mask': "Face recognition accuracy may be affected by masks, as it needs to capture your facial features clearly.",
+          'can someone else mark attendance for me': "No, the system identifies unique facial features to prevent proxy attendance and ensure secure, accurate records.",
+          'what happens if i miss a check-in': "If you miss a check-in, you may be able to manually request attendance adjustments, depending on your organization's policy.",
+    
+            # Troubleshooting and FAQs
+          'what do i do if my attendance was not recorded': "Check to ensure your face is fully visible to the camera. You may also contact the administrator for troubleshooting if issues persist.",
+          'what if there is an error during face recognition': "Errors may happen due to lighting or network issues. Try again, or contact support if the problem continues.",
+          'what are the benefits of face recognition attendance': "It’s fast, hands-free, reduces errors, and prevents proxy attendance, all while keeping your data secure.",
+          'is this system secure from hackers': "The system is designed with data security in mind, using encryption and access control to protect against unauthorized access."
+
+
 }
 
 
