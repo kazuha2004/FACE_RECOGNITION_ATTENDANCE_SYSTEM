@@ -40,7 +40,7 @@ class Face_Recognition:
     def mark_attendance(self, student_id, roll, name, dep):
         today_date = datetime.now().strftime("%d-%m-%Y")
         current_time = datetime.now()
-        
+
         attendance_dir = 'attendance_data'
         if not os.path.exists(attendance_dir):
             os.makedirs(attendance_dir)
@@ -71,7 +71,7 @@ class Face_Recognition:
 
                 for line in myDataList:
                     entry = line.split(",")
-                    if (student_id == entry[0] and today_date == entry[5] and 
+                    if (student_id == entry[0] and today_date == entry[5] and
                             (current_period is None or f"Period {current_period}" == entry[6])):
                         return "Already Marked"
 
@@ -96,7 +96,7 @@ class Face_Recognition:
             clf.read("classifier.xml")
             video_cap = cv2.VideoCapture(0)
 
-            conn = mysql.connector.connect(host="localhost", username="root", password="8055", database="face_recognition")
+            conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@", database="face_recognition")
             cursor = conn.cursor()
             cursor.execute("SELECT Student_id, Name, Roll, Dep FROM student")
             all_students = cursor.fetchall()
@@ -116,7 +116,7 @@ class Face_Recognition:
                     confidence = int((100 * (1 - predict / 300)))
 
                     if confidence > 75:
-                        conn = mysql.connector.connect(host="localhost", username="root", password="8055", database="face_recognition")
+                        conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@", database="face_recognition")
                         cursor = conn.cursor()
 
                         cursor.execute(f"SELECT Name, Roll, Dep FROM student WHERE Student_id={student_id}")
@@ -134,7 +134,7 @@ class Face_Recognition:
                             else:
                                 message = "Already Marked"
 
-                            cv2.putText(img, message, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
+                            cv2.putText(img, message, (x, y + h + 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
                             cv2.putText(img, f"ID: {student_id}", (x, y - 95), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
                             cv2.putText(img, f"Roll: {roll}", (x, y - 70), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
                             cv2.putText(img, f"Name: {name}", (x, y - 45), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
