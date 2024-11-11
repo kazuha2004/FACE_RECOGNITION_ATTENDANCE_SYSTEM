@@ -74,14 +74,14 @@ class Face_Recognition:
 
                 # Define lecture periods from timetable
                 lecture_periods = {
-                    1: {"start": now.replace(hour=9, minute=5), "end": now.replace(hour=9, minute=20)},
-                    2: {"start": now.replace(hour=9, minute=55), "end": now.replace(hour=10, minute=10)},
-                    3: {"start": now.replace(hour=10, minute=55), "end": now.replace(hour=11, minute=10)},
-                    4: {"start": now.replace(hour=11, minute=45), "end": now.replace(hour=12, minute=0)},
-                    5: {"start": now.replace(hour=13, minute=25), "end": now.replace(hour=13, minute=40)},
-                    6: {"start": now.replace(hour=14, minute=15), "end": now.replace(hour=14, minute=30)},
-                    7: {"start": now.replace(hour=15, minute=15), "end": now.replace(hour=15, minute=30)},
-                    8: {"start": now.replace(hour=16, minute=5), "end": now.replace(hour=16, minute=20)},
+                    1: {"start": now.replace(hour=9, minute=5), "end": now.replace(hour=9, minute=55)},
+                    2: {"start": now.replace(hour=9, minute=55), "end": now.replace(hour=10, minute=45)},
+                    3: {"start": now.replace(hour=10, minute=55), "end": now.replace(hour=11, minute=45)},
+                    4: {"start": now.replace(hour=11, minute=45), "end": now.replace(hour=12, minute=35)},
+                    5: {"start": now.replace(hour=13, minute=25), "end": now.replace(hour=14, minute=15)},
+                    6: {"start": now.replace(hour=14, minute=15), "end": now.replace(hour=15, minute=5)},
+                    7: {"start": now.replace(hour=15, minute=15), "end": now.replace(hour=16, minute=5)},
+                    8: {"start": now.replace(hour=16, minute=5), "end": now.replace(hour=16, minute=55)},
                 }
 
                 attendance_status = "Absent"  # Default to Absent if the time doesn't match a period
@@ -118,7 +118,7 @@ class Face_Recognition:
             video_cap = cv2.VideoCapture(0)
 
             # Fetch all students from the database
-            conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@", database="face_recognition")
+            conn = mysql.connector.connect(host="localhost", username="root", password="8055", database="face_recognition")
             cursor = conn.cursor()
             cursor.execute("SELECT Student_id, Name, Roll, Dep FROM student")
             all_students = cursor.fetchall()
@@ -139,7 +139,7 @@ class Face_Recognition:
                     confidence = int((100 * (1 - predict / 300)))
 
                     if confidence > 75 : # Recognized face
-                        conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@", database="face_recognition")
+                        conn = mysql.connector.connect(host="localhost", username="root", password="8055", database="face_recognition")
                         cursor = conn.cursor()
 
                         cursor.execute(f"SELECT Name, Roll, Dep FROM student WHERE Student_id={student_id}")
@@ -170,7 +170,7 @@ class Face_Recognition:
             # After face recognition ends, mark absent students
             absent_students = students_in_class - recognized_ids
             for student_id in absent_students:
-                conn = mysql.connector.connect(host="localhost", username="root", password="Sahil30@", database="face_recognition")
+                conn = mysql.connector.connect(host="localhost", username="root", password="8055", database="face_recognition")
                 cursor = conn.cursor()
 
                 cursor.execute(f"SELECT Name, Roll, Dep FROM student WHERE Student_id={student_id}")

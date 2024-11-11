@@ -1,3 +1,4 @@
+import pyttsx3
 from tkinter import *
 from tkinter import messagebox
 from PIL import Image, ImageTk
@@ -17,9 +18,12 @@ class Face_Recognition_System:
         self.root.geometry("1500x790+0+0")
         self.root.title("Face Recognition System")
 
+        # Initialize text-to-speech engine
+        self.speech_engine = pyttsx3.init()
+        self.speech_engine.setProperty('rate', 150)  # Set the speech rate to slow down the audio
+
         self.chatbot_window = None  # To keep track of the ChatBot window
         self.chatbot_open = False  # Flag to check if ChatBot is open
-
 
         # IMAGE 1
         img = Image.open(r"D:\wallpapers\glasses.jpg")
@@ -144,12 +148,21 @@ class Face_Recognition_System:
         b3_1 = Button(self.root, text="Exit", command=self.exit_program, cursor="hand2", font=("Helvetica", 15, "bold"), bg="black", fg="white")
         b3_1.place(x=1100, y=680, width=220, height=40)
 
+    def announce_opening(self, module_name):
+        self.speech_engine.say(f"{module_name} is opening now.")
+        self.speech_engine.runAndWait()
+
+    def student_details(self):
+        self.announce_opening("Student Details Module")
+        self.new_window = Toplevel(self.root)
+        self.app = Student(self.new_window)
 
     def toggle_chat_bot(self):
         if not self.chatbot_open:
             self.chatbot_window = Toplevel(self.root)
             self.app = ChatBot(self.chatbot_window)
             self.chatbot_open = True
+            self.announce_opening("Chat Bot")
 
             # Close chatbot window when window is destroyed
             self.chatbot_window.protocol("WM_DELETE_WINDOW", self.close_chat_bot)
@@ -161,32 +174,35 @@ class Face_Recognition_System:
             self.chatbot_open = False
             self.chatbot_window.destroy()
 
-    def student_details(self):
-        self.new_window = Toplevel(self.root)
-        self.app = Student(self.new_window)
-
     def open_developer_window(self):
+        self.announce_opening("Developer Report and Analytics")
         self.new_window = Toplevel(self.root)
         self.app = Developer(self.new_window)
 
     def open_img(self):
+        self.announce_opening("Photos")
         os.startfile("data")
 
     def train_data(self):
+        self.announce_opening("Training Data")
         self.new_window = Toplevel(self.root)
         self.app = Train(self.new_window)
 
     def face_recognition_data(self):
+        self.announce_opening("Face Recognition")
         self.new_window = Toplevel(self.root)
         self.app = Face_Recognition(self.new_window)
 
     def Attendance_data(self):
+        self.announce_opening("Attendance")
         self.new_window = Toplevel(self.root)
         self.app = Attendance(self.new_window)
 
     def exit_program(self):
         choice = messagebox.askyesno("Exit", "Do you really want to exit?")
         if choice > 0:
+            self.speech_engine.say("Exiting the program now. Goodbye!")
+            self.speech_engine.runAndWait()
             self.root.destroy()
         else:
             return
@@ -196,3 +212,4 @@ if __name__ == "__main__":
     root = Tk()
     obj = Face_Recognition_System(root)
     root.mainloop()
+7
