@@ -390,7 +390,7 @@ class Student:
                   
             else:
                   try:
-                        conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
+                        conn = mysql.connector.connect(host="localhost", username="root", password="8055", database="face_recognition")
                         my_cursor = conn.cursor()
                         my_cursor.execute("insert into student values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                                           (self.var_dep.get(),
@@ -422,7 +422,7 @@ class Student:
 
       #======================Fetch data =============================
       def fetch_data(self):
-            conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
+            conn = mysql.connector.connect(host="localhost", username="root", password="8055", database="face_recognition")
             my_cursor = conn.cursor()
             my_cursor.execute("select * from student")
             data=my_cursor.fetchall()
@@ -476,7 +476,7 @@ class Student:
                               self.announce_in_thread("Do you want to update this student's details?")
                               update = messagebox.askyesno("Update", "Do you want to update this student's details?", parent=self.root)
                               if update:
-                                    conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
+                                    conn = mysql.connector.connect(host="localhost", username="root", password="8055", database="face_recognition")
                                     my_cursor = conn.cursor()
                                     my_cursor.execute("UPDATE student SET Dep=%s, course=%s, Year=%s, Semester=%s, Name=%s, Division=%s, Roll=%s, Gender=%s, Dob=%s, Email=%s, Phone=%s, Address=%s, Teacher=%s, PhotoSample=%s WHERE Student_id=%s",
 
@@ -527,7 +527,7 @@ class Student:
                         self.announce_in_thread("Do you want to delete this student")
                         delete=messagebox.askyesno("Student Delete Page","Do you want to delete this student",parent=self.root)
                         if delete>0:
-                              conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
+                              conn = mysql.connector.connect(host="localhost", username="root", password="8055", database="face_recognition")
                               my_cursor = conn.cursor()
                               sql="delete from student where Student_id=%s"
                               val=(self.var_std_id.get(),)
@@ -578,7 +578,7 @@ class Student:
                   messagebox.showerror("Error", "All fields are required", parent=self.root)
             else:
                   try:
-                              conn = mysql.connector.connect(host="localhost", username="root", password="0607", database="face_recognition")
+                              conn = mysql.connector.connect(host="localhost", username="root", password="8055", database="face_recognition")
                               my_cursor = conn.cursor()
                   
                               # Ensure the correct student ID is used for saving images

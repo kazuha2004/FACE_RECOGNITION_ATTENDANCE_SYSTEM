@@ -1,1 +1,1 @@
-self.announce_opening("Student Details Module")
+0
